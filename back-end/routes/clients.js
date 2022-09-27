@@ -1,50 +1,35 @@
 
+// back-end/routes/clients.js
 
 const express = require('express');
 const router = express.Router();
+const { faker } = require ('@faker-js/faker');
 
 const Clients = require('../models/client');
 
+router.get('/seed/:q', (req, res) => {
+  console.log(`seeding ${req.params.q} clients (maybe)`);
+  const fakes = [];
 
-
-// router.get('', (req, res) => {
-//   console.log('get route hit');
-//   res.json({ 'success': true });
-// })
-
-router.get('/seed', (req, res) => {
-  Clients.create([
-    {
-      name: "Jim James",
-      email: "jj@gmail.org",
-      phone: "111-222-3333",
-    },
-    {
-      name: "Anna Annasdottir",
-      email: "aa@gmail.org",
-      phone: "111-333-3333",
-    },
-    {
-      name: "Greg Gregsson",
-      email: "gg@gmail.org",
-      phone: "111-444-3333",
-    },
-    {
-      name: "Alfons deAlfons",
-      email: "ad@gmail.org",
-      phone: "111-555-3333",
-    },
-    {
-      name: "Jana Janovitch",
-      email: "jj2@gmail.org",
-      phone: "111-666-3333",
-    }
-  ],
+  for (let i = 0; i < req.params.q; i++) {
+    let c = {};
+    let firstName = faker.name.firstName();
+    let lastName = faker.name.lastName();
+    let email = faker.internet.email(firstName, lastName);
+    let phone = faker.phone.number();
+    c.name = `${firstName} ${lastName}`;
+    c.email = email;
+    c.phone = phone;
+    fakes.push(c);
+  }
+  Clients.create(fakes,
     (err, data) => {
+      console.log(data);
       res.json(err);
-      // res.redirect("/clients");
     })
 })
+
+
 router.get('/', async (req, res) => {
   console.log('clients route hit')
   await Clients.find()
@@ -57,24 +42,26 @@ router.get('/', async (req, res) => {
     });
 })
 
-router.get('/new', (req, res) => {
-  res.render('clients/Client');
-})
 
 router.post('/', async (req, res) => {
   await Clients.create(req.body)
     .then((newClient) => {
-      res.redirect('/clients')
+      res.json({ 'newClient': newClient });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json(err);
     })
 })
 
 router.delete('/:id', async (req, res) => {
   await Clients.findByIdAndRemove(req.params.id)
     .then(() => {
-      res.redirect('/clients');
+      res.json({ 'success': true });
     })
     .catch((err) => {
-      res.json();
+      console.log(err);
+      res.json({ 'success': false });
     })
 })
 
@@ -82,14 +69,11 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
   await Clients.findById(req.params.id)
-    .populate("vehicles")
-    .populate("weapons")
-    .then((result) => {
-      res.render('clients/Client', {
-        client: result,
-      })
+    .then((client) => {
+      res.json({ 'client': client });
     })
     .catch((err) => {
+      console.log(err);
       res.json(err);
     })
 });
@@ -98,7 +82,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   await Clients.findByIdAndUpdate(req.params.id, req.body)
     .then((updatedClient) => {
-      res.redirect('clients');
+      res.json({ 'client': updatedClient });
     })
     .catch((err) => {
       res.json(err);
