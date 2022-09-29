@@ -35,8 +35,10 @@ router.get('/', async (req, res) => {
 
   console.log('clients root route')
 
-  // leaving out _id and __v HERE because it's simpler than doing it in the view
-  Clients.find({}, "-_id -__v")
+  // if you leave out the _id, the populate on a virtual lookup won't work.
+  Clients.find({}, " -__v")
+    .populate({ path: 'project_count', select: 'client' })
+
     .then((allClients) => {
 
       // res.json({ projects: allClients }) === BAD = true.

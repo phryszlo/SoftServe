@@ -28,42 +28,43 @@ app.post('/addPublisher', async (req, res) => {
 router.get('/seed/:q', (req, res) => {
   console.log(`seeding ${req.params.q} projects (maybe)`);
   const fakes = [];
-  const clientIds = [];
+  let clientIds = [];
 
   // get all client_ids in our database
+  // to randomly assign to 
   Clients.find({}, "_id")
     .then((foundClients) => {
       foundClients.forEach((client) => {
         clientIds.push(client.id);
       })
+
+      //ObjectId('63334d4399b7d70f32220112')
+
+      // generate fake data from faker and random-word-slugs libs
+      for (let i = 0; i < req.params.q; i++) {
+        let rndIdx = Math.floor(Math.random() * clientIds.length);
+        console.log(`rndIdx = ${rndIdx}`)
+        let p = {};
+        let title = generateSlug(4, { format: "title" });
+        let orderDate = faker.date.between("2022-01-01", Date.now())
+        let promiseDate = faker.date.future();
+        p.title = title;
+        p.order_date = orderDate;
+        p.promise_date = promiseDate;
+        p.client = clientIds[rndIdx];
+        console.log(`p.client = ${p.client}`)
+        fakes.push(p);
+      }
+
+      Projects.create(fakes,
+        (err, data) => {
+          console.log(data);
+          res.status(400).json({ success: false, message: err });
+        })
+
     })
     .catch((err) => {
-      res.status(400).json({ success: false, message: err.message });
-    })
-
-  //ObjectId('63334d4399b7d70f32220112')
-
-  // generate fake data from faker and random-word-slugs libs
-  for (let i = 0; i < req.params.q; i++) {
-    let rndIdx = Math.floor(Math.random() * clientIds.length);
-    let p = {};
-    let name = generateSlug(4, { format: "title" });
-    let orderDate = faker.date.between("2022-01-01", Date.now())
-    let promiseDate = faker.date.future();
-    let client = '63334d4399b7d70f32220112';
-    p.name = name;
-    p.order_date = orderDate;
-    p.promise_date = promiseDate;
-    p.client = clientIds[rndIdx];
-    fakes.push(p);
-  }
-
-
-
-  Projects.create(fakes,
-    (err, data) => {
-      console.log(data);
-      res.status(400).json({ success: false, message: err.message });
+      res.status(400).json({ success: false, message: err });
     })
 })
 
@@ -75,35 +76,14 @@ router.get('/seed/:q', (req, res) => {
 router.get('/', async (req, res) => {
   // just testing a cursor
   console.log('projects root route')
-  const cursor = Projects.find().cursor();
-  for (let doc = await cursor.next();
-    doc != null;
-    doc = await cursor.next()) {
-    Object.values(doc).forEach(obj => {
-      Object.entries(obj).forEach((key, val) => {
-        // console.log(`key: ${key} val: ${val}`);
-        // console.log(`key type: ${typeof(key)}`);
-      })
-      // console.log(`... ${obj}`)
-    })
-    // console.log(`doc := ${doc}`);
-  }
 
-
-  // leaving out _id and __v HERE because it's simpler than doing it in the view
-  Projects.find({}, "-_id -__v")
+  Projects.find({}, "-__v -createdAt -updatedAt")
+    .populate({ path: 'client', select: 'name' })
     .then((allProjects) => {
+
       console.log(`allProjects: ${allProjects}`);
 
-      allProjects.forEach((proj, i) => {
-        Object.values(proj.toJSON()).forEach(p => {
-          console.log(`p: ${typeof (p)}, isDate? ${(p instanceof Date)}`);
-        })
-        console.log(`${i} : ${Object.values(proj.toJSON())}`)
-      })
-      // originally had this as res.json({ projects: allProjects })
-      // and that DID NOT WORK. noting this because it happened twice, and it wasn't easy to chase down.
-      res.json(allProjects);
+      res.send(allProjects);
     })
     .catch((err) => {
       res.status(400).json({ success: false, message: err.message });

@@ -7,12 +7,12 @@ const AutoTable = ({ documents, title }) => {
       : []
   )
 
-  console.log('docs=', documents)
-  console.log('fields=', fields)
+  const excludeFields = [
+    '_id', 'id', '__v'
+  ]
 
-  documents.forEach(d => {
-    console.log(Object.values(d));
-  });
+  console.log(`${title} docs = ${documents}`)
+  console.log(`${title} fields = ${fields}`)
 
   return (
     <div className="component autotable-component">
@@ -26,9 +26,13 @@ const AutoTable = ({ documents, title }) => {
               <tr>
                 {fields.map((field, index) => {
                   return (
-                    <th key={`th-${index}`}>
-                      {field}
-                    </th>
+                    excludeFields.indexOf(field) < 0 ?
+
+                      <th key={`th-${index}`}>
+                        {field}
+                      </th>
+
+                      : ''
                   )
                 })}
               </tr>
@@ -39,17 +43,29 @@ const AutoTable = ({ documents, title }) => {
                   <tr key={`tr-${rowIndex}`}>
                     {fields.map((field, colIndex) => {
                       return (
-                        <td
-                          key={`td-${colIndex}`}
-                          style={field === 'phone' ? { textAlign: "right" } : {}}
-                        >
-                          {
-                            // (Object.values(doc)[colIndex] instanceof Date) ?
-                            field.endsWith('_date') ?
-                              `${new Date(Object.values(doc)[colIndex]).toDateString()} `
-                              : Object.values(doc)[colIndex]
-                          }
-                        </td>
+                        excludeFields.indexOf(field) < 0
+                          ?
+                          <td
+                            key={`td-${colIndex}`}
+                            style={field === 'phone' ? { textAlign: "right" } : {}}
+                          >
+                            {
+                              //    (Object.values(doc)[colIndex] instanceof Date) ?
+                              field.endsWith('_date') ?
+
+                                `${new Date(Object.values(doc)[colIndex]).toDateString()}`
+
+                                : typeof (Object.values(doc)[colIndex]) === "object"
+                                  ? Object.entries(Object.values(doc)[colIndex]).find(
+                                    (key, value) =>
+                                      Object.values(doc)[colIndex][key] = value
+                                  )
+                                  : Object.values(doc)[colIndex]
+                            }
+                          </td>
+
+                          : ''
+
                       )
                     })}
                   </tr>
@@ -58,7 +74,7 @@ const AutoTable = ({ documents, title }) => {
             </tbody>
           </table>
 
-          : <div className="no-table-here">NO {title} RECEIVED IN AUTOTABLE</div>
+          : <div className="no-table-here"> {title.toUpperCase()} : NO DATA RECEIVED IN AUTOTABLE</div>
       }
     </div>
   )
