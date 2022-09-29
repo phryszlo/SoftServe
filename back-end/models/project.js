@@ -5,12 +5,13 @@ const projectSchema = new Schema({
   name: { type: String, required: true },
   order_date: { type: Date, required: true },
   promise_date: { type: Date, required: true },
-  client_id: {
+  client: {
     type: Schema.Types.ObjectId,
     ref: "Client"
   },
 
-});
+},
+  { timestamps: true });
 
 const Project = mongoose.model('Project', projectSchema);
 

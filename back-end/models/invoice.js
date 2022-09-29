@@ -8,10 +8,10 @@ const invoiceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Project"
   },
-  invoice_items: {
+  invoice_items: [{
     type: Schema.Types.ObjectId,
     ref: "InvoiceItems"
-  },
+  }],
 
 });
 

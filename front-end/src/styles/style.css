@@ -1,0 +1,70 @@
+:root {
+  --color0: #9ff;
+  --color1: rgb(230, 253, 185, 0.92);
+  --color2: rgba(255, 153, 116, 0.92);
+  --color3: rgba(46, 219, 150, 0.92);
+  --color4: rgba(46,119,200, 0.88);
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  color: var(--color1);
+}
+
+/* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+                      `PAGE` COMPONENTS
+/*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
+h1.page-title {
+  color: var(--color3);
+}
+.page-component {
+  border: 3px solid var(--color1);
+  display: flex;
+  flex-direction: column;
+  width: 95vw;
+  margin: auto;
+}
+.component {
+  /* border: 1px solid; */
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+                      `ELEMENT` COMPONENTS
+/*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
+h2.component-title {
+  color: var(--color0);
+  font-size: 14px;
+  /* border: 2px solid; */
+  margin: .5em 0 .5em 0;
+}
+.autotable-component {
+  border-color: red;
+  width: fit-content;
+  margin: 0 auto 1em auto;
+}
+.auto-table {
+  border-collapse: collapse;
+  border: .5px double var(--color0);
+  width: fit-content;
+  margin: auto;
+}
+.auto-table th {
+  font-size: 12px;
+  border: .3px solid var(--color2);
+  color: var(--color2);
+  padding: .2em;
+}
+.auto-table td {
+  padding: .3em .6em;
+  text-align: left;
+  font-size: 12px;
+  border: .3px solid var(--color3);
+}
+/* this is sub-optimal. better if you could mark your auto-fields somehow.. */
+.auto-table td:last-child {
+  text-align: right;
+}

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 
 const clientRoutes = require('./routes/clients');
+const projectRoutes = require('./routes/projects');
 
 const app = new express();
 const PORT = process.env.PORT || 4000;
@@ -18,6 +19,7 @@ app.use(methodOverride("_method"));
 
 // mein routen
 app.use('/api/clients/', clientRoutes);
+app.use('/api/projects/', projectRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

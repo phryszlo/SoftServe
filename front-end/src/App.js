@@ -1,7 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import Dashboard from "./components/Dashboard";
+import "./styles/style.css";
+import Dashboard from "./components/pages/Dashboard";
 
 // HEY!
 // TURN STRICT MODE BACK ON!
@@ -11,8 +11,8 @@ function App() {
 
   return (
     <div className="App">
-      <Dashboard></Dashboard>
-      
+      <Dashboard title="dashboard"></Dashboard>
+
     </div>
   );
 }

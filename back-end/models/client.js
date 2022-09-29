@@ -7,6 +7,16 @@ const clientSchema = new Schema({
   phone: { type: String, required: false },
 });
 
+// SELECT [whatever] FROM ref WHERE localField = foreignField;
+clientSchema.virtual('projects', {
+  ref: 'Project', // The model to use
+  localField: '_id', // Find [records] where `localField`
+  foreignField: 'client', // is equal to `foreignField`
+});
+
+clientSchema.set('toObject', { virtuals: true });
+clientSchema.set('toJSON', { virtuals: true });
+
 const Client = mongoose.model('Client', clientSchema);
 
 module.exports = Client;

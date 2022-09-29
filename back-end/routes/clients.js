@@ -3,9 +3,10 @@
 
 const express = require('express');
 const router = express.Router();
-const { faker } = require ('@faker-js/faker');
+const { faker } = require('@faker-js/faker');
 
 const Clients = require('../models/client');
+// const Projects = require('../models/project');
 
 router.get('/seed/:q', (req, res) => {
   console.log(`seeding ${req.params.q} clients (maybe)`);
@@ -31,11 +32,29 @@ router.get('/seed/:q', (req, res) => {
 
 
 router.get('/', async (req, res) => {
-  console.log('clients route hit')
-  await Clients.find()
+
+  console.log('clients root route')
+
+  // leaving out _id and __v HERE because it's simpler than doing it in the view
+  Clients.find({}, "-_id -__v")
     .then((allClients) => {
-      console.log(allClients)
-      res.json({ 'clients': allClients });
+
+      // res.json({ projects: allClients }) === BAD = true.
+      res.json(allClients); // ☑️
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+
+
+router.get('/:id', (req, res) => {
+
+  Clients.findById(req.params.id)
+    .then((foundClient) => {
+      console.log(foundClient)
+      res.json(foundClient);
     })
     .catch((err) => {
       res.json(err);
