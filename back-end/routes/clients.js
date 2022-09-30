@@ -32,21 +32,34 @@ router.get('/seed/:q', (req, res) => {
 
 
 router.get('/', async (req, res) => {
+  try {
+    console.log('clients root route')
+    const allClients = await Clients.find({}, "-__v -createdAt -updatedAt")
+      .populate({ path: 'project_count', select: 'client' });
 
-  console.log('clients root route')
+    console.log(`${allClients.length} products returned`);
+    res.json({links: ['name'], allClients});
+  }
+  catch (err) {
+    // res.status(400).json(obj)
+    res.status(400).json({ success: false, message: err });
+  }
 
-  // if you leave out the _id, the populate on a virtual lookup won't work.
-  Clients.find({}, " -__v")
-    .populate({ path: 'project_count', select: 'client' })
 
-    .then((allClients) => {
+  // console.log('clients root route')
 
-      // res.json({ projects: allClients }) === BAD = true.
-      res.json(allClients); // ☑️
-    })
-    .catch((err) => {
-      res.json(err);
-    });
+  // // if you leave out the _id, the populate on a virtual lookup won't work.
+  // Clients.find({}, " -__v")
+  //   .populate({ path: 'project_count', select: 'client' })
+
+  //   .then((allClients) => {
+
+  //     // res.json({ projects: allClients }) === BAD = true.
+  //     res.json(allClients); // ☑️
+  //   })
+  //   .catch((err) => {
+  //     res.json(err);
+  //   });
 });
 
 

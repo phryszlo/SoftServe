@@ -3,11 +3,13 @@ import AutoTable from '../elements/AutoTable';
 
 function Clients(props) {
   const [clients, setClients] = React.useState(null);
+  const [linkFields, setLinkFields] = React.useState([]);
 
   React.useEffect(() => {
     const getClients = async () => {
       const clientsFromServer = await fetchClients()
-      console.log(`clientsFromServer = ${Object.keys(clientsFromServer)}`)
+      console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
+      console.log(`linkFields = ${linkFields}`)
       setClients(clientsFromServer)
     }
     getClients();
@@ -16,9 +18,15 @@ function Clients(props) {
 
   const fetchClients = async () => {
     const res = await fetch('/api/clients/')
+    console.log(`res: ${Object.entries((key, entry) => key === 'allClients')}`);
     const data = await res.json()
-    return data
+
+    console.log(data['allClients']);
+    setLinkFields(Object.values(data)[0]);
+
+    return data.allClients;
   }
+
 
 
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
@@ -29,7 +37,8 @@ function Clients(props) {
 
       {
         clients ?
-          <AutoTable title="all clients" linkOn="name" documents={clients}></AutoTable>
+          <AutoTable title="all clients" linkFields={linkFields} documents={clients}></AutoTable>
+          // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
 
