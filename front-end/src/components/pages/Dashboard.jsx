@@ -83,7 +83,7 @@ function Dashboard(props) {
       </div>
       {
         projects ?
-          <AutoTable title="all y'alls projects" linkFields={linkFields} documents={projects} />
+          <AutoTable title="all y'alls projects" linkFields={linkFields} documents={projects.allProjects} />
           : <div className="no-table-here"></div>
       }
       {

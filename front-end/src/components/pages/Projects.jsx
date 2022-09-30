@@ -1,5 +1,5 @@
 import React from 'react'
-import AutoTable from '../elements/AutoTable';
+import AutoTable from '../elements/AutoTable_broken';
 
 function Projects(props) {
   const [projects, setProjects] = React.useState(null);
@@ -37,7 +37,7 @@ function Projects(props) {
 
       {
         projects ?
-          <AutoTable title="all projects" linkOn="name" documents={projects}></AutoTable>
+          <AutoTable title="all projects" linkFields={linkFields} documents={projects}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
