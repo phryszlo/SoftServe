@@ -10,7 +10,8 @@ const AutoForm = ({ title, document }) => {
   console.log('fields=', fields)
 
   return (
-    <div className="component autoform">
+    <div className="component autoform-component">
+      <h2 className="component-title">{title}</h2>
 
       {document ?
         <form action="" className="auto-form">

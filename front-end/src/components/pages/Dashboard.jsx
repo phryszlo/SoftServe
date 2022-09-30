@@ -5,6 +5,8 @@ function Dashboard(props) {
   const [clients, setClients] = React.useState(null);
   const [projects, setProjects] = React.useState(null);
   const [seedQ, setSeedQ] = React.useState(5);
+  const [linkFields, setLinkFields] = React.useState([]);
+
 
   // there is a new "feature" in react v18 whereby useEffect runs 2x
   // when in dev mode with StrictMode turned on. it's intentional. i don't understand it.
@@ -15,33 +17,39 @@ function Dashboard(props) {
   React.useEffect(() => {
     const getClients = async () => {
       const clientsFromServer = await fetchClients()
-      console.log(`clientsFromServer = ${Object.keys(clientsFromServer)}`)
+      console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
       setClients(clientsFromServer)
     }
 
     const getProjects = async () => {
       const projectsFromServer = await fetchProjects()
-      console.log(`projectsFromServer = ${Object.keys(projectsFromServer)}`)
+      console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
       setProjects(projectsFromServer)
     }
 
-    getClients();
     getProjects();
+    getClients();
 
   }, []);
 
   const fetchClients = async () => {
     const res = await fetch('/api/clients/')
     const data = await res.json()
+
+    console.log(`data: ${Object.values(data)[0]}`)
+
+    // this requires that the link_fields be passed in as the first object in the res.json()
+    // setLinkFields(Object.values(data)[0]);
     return data
   }
   const fetchProjects = async () => {
     const res = await fetch('/api/projects/')
     const data = await res.json()
+
+    // this requires that the link_fields be passed in as the first object in the res.json()
+    setLinkFields(Object.values(data)[0]);
     return data
   }
-
-
 
   const onSeedClientsClick = (e) => {
     // setSeedClicks(seedClicks + 1);
@@ -50,8 +58,7 @@ function Dashboard(props) {
       .then((data) => {
         console.log(data);
         data && setClients(data.message)
-      })
-      ;
+      });
   }
 
   const onSeedProjectsClick = (e) => {
@@ -61,12 +68,11 @@ function Dashboard(props) {
       .then((data) => {
         console.log(data);
         data && setClients(data.message)
-      })
-      ;
+      });
   }
 
-  // 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
-  
+   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
+    🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
     <div className='page-component dashboard-page'>
       <h1 className="page-title">{props.title}</h1>
@@ -77,13 +83,13 @@ function Dashboard(props) {
       </div>
       {
         projects ?
-          <AutoTable title="all projects" documents={projects}></AutoTable>
-          : <div className="no-table-here">NO PROJECT PROP RECEIVED IN DASHBOARD</div>
+          <AutoTable title="all y'alls projects" linkFields={linkFields} documents={projects} />
+          : <div className="no-table-here"></div>
       }
       {
         clients ?
-          <AutoTable title="all clients" documents={clients}></AutoTable>
-          : <div className="no-table-here">NO CLIENT PROP RECEIVED IN DASHBOARD</div>
+          <AutoTable title="all y'alls clients" documents={clients} />
+          : <div className="no-table-here"></div>
       }
 
     </div>
@@ -91,7 +97,7 @@ function Dashboard(props) {
 }
 
 Dashboard.defaultProps = {
-  title: 'soft.serv.dash.',
+  title: `Moe's Soft Serv - Internal Dashboard`,
 }
 
 export default Dashboard

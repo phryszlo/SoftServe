@@ -74,20 +74,18 @@ router.get('/seed/:q', (req, res) => {
 
 
 router.get('/', async (req, res) => {
-  // just testing a cursor
-  console.log('projects root route')
+  try {
+    console.log('projects root route')
+    const allProjects = await Projects.find({}, "-__v -createdAt -updatedAt")
+      .populate({ path: 'client', select: 'name' });
 
-  Projects.find({}, "-__v -createdAt -updatedAt")
-    .populate({ path: 'client', select: 'name' })
-    .then((allProjects) => {
-
-      console.log(`allProjects: ${allProjects}`);
-
-      res.send(allProjects);
-    })
-    .catch((err) => {
-      res.status(400).json({ success: false, message: err.message });
-    });
+    console.log(`${allProjects.length} products returned`);
+    res.json({links: ['title','client'], allProjects});
+  }
+  catch (err) {
+    // res.status(400).json(obj)
+    res.status(400).json({ success: false, message: err });
+  }
 })
 
 
