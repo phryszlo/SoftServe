@@ -5,7 +5,8 @@ function Dashboard(props) {
   const [clients, setClients] = React.useState(null);
   const [projects, setProjects] = React.useState(null);
   const [seedQ, setSeedQ] = React.useState(5);
-  const [linkFields, setLinkFields] = React.useState([]);
+  const [clientLinkFields, setClientLinkFields] = React.useState([]);
+  const [projectLinkFields, setProjectLinkFields] = React.useState([]);
 
 
   // there is a new "feature" in react v18 whereby useEffect runs 2x
@@ -15,16 +16,15 @@ function Dashboard(props) {
   // hence StrictMode is disabled whilst i.b. dev'ing.
 
   React.useEffect(() => {
-    const getClients = async () => {
-      const clientsFromServer = await fetchClients()
-      console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
-      setClients(clientsFromServer)
-    }
-
     const getProjects = async () => {
       const projectsFromServer = await fetchProjects()
       console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
       setProjects(projectsFromServer)
+    }
+    const getClients = async () => {
+      const clientsFromServer = await fetchClients()
+      console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
+      setClients(clientsFromServer)
     }
 
     getProjects();
@@ -39,17 +39,22 @@ function Dashboard(props) {
     console.log(`data: ${Object.values(data)[0]}`)
 
     // this requires that the link_fields be passed in as the first object in the res.json()
-    // setLinkFields(Object.values(data)[0]);
-    return data
+    setClientLinkFields(Object.values(data)[0]);
+    return data.allClients;
   }
+
   const fetchProjects = async () => {
     const res = await fetch('/api/projects/')
+    console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
     const data = await res.json()
 
-    // this requires that the link_fields be passed in as the first object in the res.json()
-    setLinkFields(Object.values(data)[0]);
-    return data
+    console.log(data['allProjects']);
+    setProjectLinkFields(Object.values(data)[0]);
+
+    // THIS data.allProjects OR return projects.allProjects to AutoTable, NOT BOTH
+    return data.allProjects;
   }
+
 
   const onSeedClientsClick = (e) => {
     // setSeedClicks(seedClicks + 1);
@@ -83,12 +88,13 @@ function Dashboard(props) {
       </div>
       {
         projects ?
-          <AutoTable title="all y'alls projects" linkFields={linkFields} documents={projects.allProjects} />
-          : <div className="no-table-here"></div>
+        <AutoTable title="all projects" linkFields={projectLinkFields} documents={projects}></AutoTable>
+        : <div className="no-table-here"></div>
+          
       }
       {
         clients ?
-          <AutoTable title="all y'alls clients" documents={clients} />
+          <AutoTable title="all y'alls clients" linkFields={clientLinkFields} documents={clients} />
           : <div className="no-table-here"></div>
       }
 

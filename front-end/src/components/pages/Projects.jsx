@@ -1,5 +1,5 @@
 import React from 'react'
-import AutoTable from '../elements/AutoTable_broken';
+import AutoTable from '../elements/AutoTable';
 
 function Projects(props) {
   const [projects, setProjects] = React.useState(null);
