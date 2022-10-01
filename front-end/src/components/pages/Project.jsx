@@ -38,9 +38,9 @@ const Project = ({ document, title }) => {
               ? document
               : await fetchProject()
             // console.log(`projectFromServer = ${Object.values(projectFromServer).allProjects}`)
-            console.log(`projectFromServer = ${Object.values(Object.values(projectFromServer.project))}`)
+            // console.log(`projectFromServer = ${Object.values(Object.values(projectFromServer.project))}`)
             setProject(projectFromServer.project);
-            console.log(`projectClientFromserver = ${Object.values(Object.values(projectFromServer.project_client))}}`)
+            // console.log(`projectClientFromserver = ${Object.values(Object.values(projectFromServer.project_client))}}`)
             setProjectClient(projectFromServer.project_client);
             setImgUrl(projectFromServer.project_client
               // ? Object.entries(projectFromServer.project_client).find(([key, value]) => key === 'image_url')
@@ -90,8 +90,8 @@ const Project = ({ document, title }) => {
           <SubDisplay document={projectClient} title={'client for project'}></SubDisplay>
           {/* <ul className="project-client-details" style={{ border: '2px solid green' }}> */}
           {projectClient && Object.entries(projectClient).forEach((entry) => {
-            console.log(`projClient tostring ${JSON.stringify(projectClient)}`)
-            console.log(`the entry = ${entry[1]}`)
+            // console.log(`projClient tostring ${JSON.stringify(projectClient)}`)
+            // console.log(`the entry = ${entry[1]}`)
             return (
               <p style={{ color: "white" }}>{entry[1]}</p>
             )

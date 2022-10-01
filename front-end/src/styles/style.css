@@ -12,7 +12,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background-color: black;
-  background: linear-gradient(0deg, #102, #029 400%);
+  background: linear-gradient(160deg, #102, #029 300%);
   color: var(--color1);
   font-family: monospace;
   /* font-family: 'Blaka Ink', cursive; */
@@ -110,6 +110,10 @@ h2.component-title {
   /* border: 2px solid; */
   margin: .5em 0 .5em 0;
 }
+h1.component-title {
+  font-family: 'Blaka Ink', cursive;
+  filter: saturate(900%);
+}
 
 .autotable-component {
   border-color: red;
@@ -158,8 +162,12 @@ h2.component-title {
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 .auto-form {
   position: relative;
-  left: -.8em;
+  /* left: -.8em; */
   border: .2px inset white;
+  /* border-radius: 6%; */
+  box-shadow: 1px -1px 13px 1px rgba(29, 23, 123, 0.522),
+  -1px 1px 13px 1px rgba(29, 23, 123, 0.522);
+  padding: .2em;
   width: fit-content;
   margin: auto;
 }
@@ -193,6 +201,7 @@ img.client-img {
   font-size: 13px;
   align-self: center;
   text-align: right;
+  text-shadow: .2px .2px #9ff;
   width: 8em;
   color: var(--color2);
   /* border: solid aquamarine; */

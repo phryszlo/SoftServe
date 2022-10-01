@@ -64,6 +64,16 @@ router.get('/:id', (req, res) => {
     });
 })
 
+router.put('/:id', async (req, res) => {
+  await Clients.findByIdAndUpdate(req.params.id, req.body)
+    .then((updatedClient) => {
+      res.json({ 'client': updatedClient });
+    })
+    .catch((err) => {
+      res.json(err);
+    })
+})
+
 
 router.post('/', async (req, res) => {
   await Clients.create(req.body)
@@ -87,29 +97,9 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
-// =========PLAYER: GET ONE BY ID ============
-router.get('/:id', async (req, res) => {
-
-  await Clients.findById(req.params.id)
-    .then((client) => {
-      res.json({ 'client': client });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json(err);
-    })
-});
 
 
-router.put('/:id', async (req, res) => {
-  await Clients.findByIdAndUpdate(req.params.id, req.body)
-    .then((updatedClient) => {
-      res.json({ 'client': updatedClient });
-    })
-    .catch((err) => {
-      res.json(err);
-    })
-})
+
 
 
 module.exports = router;

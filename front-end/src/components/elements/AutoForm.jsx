@@ -5,6 +5,9 @@ import { TextField } from '@mui/material';
 
 const AutoForm = ({ title, document }) => {
 
+  const [newOrderDate, setNewOrderDate] = React.useState(null);
+  const [newPromiseDate, setNewPromiseDate] = React.useState(null);
+
   const fields =
     document ? Object.keys(document)
       : []
@@ -37,13 +40,26 @@ const AutoForm = ({ title, document }) => {
 
               <DateTimePicker
                 className="form-input date-time-picker"
-                value={docVal}
+                defaultValue={docVal}
+                value={
+                  newOrderDate && docKey === 'order_date' 
+                  ? newOrderDate
+                  : newPromiseDate && docKey === 'promise_date'
+                    ? newPromiseDate
+                    : {docVal}
+                }
                 sx={{
                   width: 400,
                   color: 'success.main',
                   backgroundColor: 'white'
                 }}
                 onChange={(newValue) => {
+                  switch(docKey){
+                    case 'order_date':
+                      setNewOrderDate(newValue);
+                    case 'promise_date':
+                      setNewPromiseDate(newPromiseDate);
+                  } 
                   console.log(`${newValue}`);
                 }}
                 renderInput={(params) => (
