@@ -34,38 +34,26 @@ router.get('/seed/:q', (req, res) => {
 router.get('/', async (req, res) => {
   try {
     console.log('clients root route')
+    // if you leave out the _id, the populate on a virtual lookup won't work.
+
     const allClients = await Clients.find({}, "-__v -createdAt -updatedAt")
+      // the {path:, select:} props refer to a virtual in the schema
       .populate({ path: 'project_count', select: 'client' });
 
-    console.log(`${allClients.length} products returned`);
-    res.json({links: ['name'], allClients});
+    console.log(`${allClients.length} clients returned`);
+    res.json({ links: ['name'], allClients });
   }
   catch (err) {
     // res.status(400).json(obj)
     res.status(400).json({ success: false, message: err });
   }
 
-
-  // console.log('clients root route')
-
-  // // if you leave out the _id, the populate on a virtual lookup won't work.
-  // Clients.find({}, " -__v")
-  //   .populate({ path: 'project_count', select: 'client' })
-
-  //   .then((allClients) => {
-
-  //     // res.json({ projects: allClients }) === BAD = true.
-  //     res.json(allClients); // ☑️
-  //   })
-  //   .catch((err) => {
-  //     res.json(err);
-  //   });
 });
 
 
 
 router.get('/:id', (req, res) => {
-
+  console.log(`route api/client/:id => id=${req.params.id}`);
   Clients.findById(req.params.id)
     .then((foundClient) => {
       console.log(foundClient)

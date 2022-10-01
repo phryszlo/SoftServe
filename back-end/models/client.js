@@ -5,6 +5,7 @@ const clientSchema = new Schema({
   name: { type: String, required: true, islink: true },
   email: { type: String, required: true },
   phone: { type: String, required: false },
+  image_url: { type: String, required: false, default: "https://www.thispersondoesnotexist.com/image" },
 },
   { timestamps: true });
 
@@ -13,12 +14,14 @@ clientSchema.virtual('projects', {
   ref: 'Project', // The model to use
   localField: '_id', // Find [records] where `localField`
   foreignField: 'client', // is equal to `foreignField`
+  default: [],
 });
 clientSchema.virtual('project_count', {
   ref: 'Project', // The model to use
   localField: '_id', // Find [records] where `localField`
   foreignField: 'client', // is equal to `foreignField`
   count: true,
+  default: 0,
 });
 
 clientSchema.set('toObject', { virtuals: true });

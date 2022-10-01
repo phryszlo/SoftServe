@@ -18,19 +18,31 @@ function Dashboard(props) {
   React.useEffect(() => {
     const getProjects = async () => {
       const projectsFromServer = await fetchProjects()
-      console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
+      // console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
       setProjects(projectsFromServer)
     }
     const getClients = async () => {
       const clientsFromServer = await fetchClients()
-      console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
+      // console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
       setClients(clientsFromServer)
     }
 
-    getProjects();
+    // getProjects();
     getClients();
 
   }, []);
+
+  const fetchProjects = async () => {
+    const res = await fetch('/api/projects/')
+    // console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
+    const data = await res.json()
+
+    console.log(data['allProjects']);
+    setProjectLinkFields(Object.values(data)[0]);
+
+    // THIS data.allProjects OR return projects.allProjects to AutoTable, NOT BOTH
+    return data.allProjects;
+  }
 
   const fetchClients = async () => {
     const res = await fetch('/api/clients/')
@@ -43,17 +55,7 @@ function Dashboard(props) {
     return data.allClients;
   }
 
-  const fetchProjects = async () => {
-    const res = await fetch('/api/projects/')
-    console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
-    const data = await res.json()
 
-    console.log(data['allProjects']);
-    setProjectLinkFields(Object.values(data)[0]);
-
-    // THIS data.allProjects OR return projects.allProjects to AutoTable, NOT BOTH
-    return data.allProjects;
-  }
 
 
   const onSeedClientsClick = (e) => {
@@ -88,14 +90,14 @@ function Dashboard(props) {
       </div>
       {
         projects ?
-        <AutoTable title="all projects" linkFields={projectLinkFields} documents={projects}></AutoTable>
-        : <div className="no-table-here"></div>
+        <AutoTable model="project" linkFields={projectLinkFields} documents={projects}></AutoTable>
+        : <div className="no-table-here">no projects received</div>
           
       }
       {
         clients ?
-          <AutoTable title="all y'alls clients" linkFields={clientLinkFields} documents={clients} />
-          : <div className="no-table-here"></div>
+          <AutoTable model="client" linkFields={clientLinkFields} documents={clients} />
+          : <div className="no-table-here">no clients received</div>
       }
 
     </div>

@@ -10,6 +10,7 @@ import "./styles/style.css";
 import Dashboard from "./components/pages/Dashboard";
 import Clients from "./components/pages/Clients";
 import Projects from "./components/pages/Projects";
+import Client from "./components/pages/Client";
 
 // HEY!
 // TURN STRICT MODE BACK ON!
@@ -29,6 +30,9 @@ function App() {
               <Link to="/clients">clients</Link>
             </li>
             <li className="app-nav-item">
+              <Link to="/client">client</Link>
+            </li>
+            <li className="app-nav-item">
               <Link to="/projects">projects</Link>
             </li>
             <li className="app-nav-item">
@@ -43,6 +47,8 @@ function App() {
           {/* <Route path="/about" /> */}
           <Route path="/clients" element={<Clients />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/client/:id" element={<Client />} />
+          <Route path="/client" element={<Client />} />
           <Route path="/" element={<Dashboard />} />
         </Routes>
 

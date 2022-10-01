@@ -21,16 +21,6 @@ const projectSchema = new Schema({
 },
   { timestamps: true });
 
-  // so the idea is to be able to populate an array of fields to be treated
-  // as links when used in a display table. it doesn't persist, but if you set it
-  // from the server route, before calling the find(), you should be able to 
-  // .populate() to include it in the json result to send to the view. that's the plan.
-projectSchema.virtual('link_fields', {
-  type: Array
-})
-  .get(function () { return this._link_fields })
-  .set(function (v) { this._link_fields = v });
-
 
 projectSchema.virtual('tasks', {
   ref: 'Task', // The model to use
@@ -48,7 +38,6 @@ projectSchema.virtual('client_name', {
   ref: 'Client',
   localField: 'client',
   foreignField: 'name',
-  islink: true,
   justOne: true
 });
 

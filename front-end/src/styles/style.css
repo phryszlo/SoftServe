@@ -1,17 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Blaka+Ink&family=Bungee+Shade&family=Butcherman&family=Faster+One&family=Montserrat:wght@300;400&family=Noto+Sans+Mono:wght@300&display=swap');
 :root {
   --color0: #9ff;
   --color1: rgb(230, 253, 185, 0.92);
   --color2: rgba(255, 153, 116, 0.92);
   --color3: rgba(46, 219, 150, 0.92);
-  --color4: rgba(46,119,200, 0.88);
+  --color4: rgba(46, 119, 200, 0.88);
+  --colorRed: firebrick;
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
   background-color: black;
+  background: linear-gradient(0deg, #111, #227 400%);
   color: var(--color1);
+  font-family: monospace;
+  /* font-family: 'Blaka Ink', cursive; */
+  /* font-family: 'Bungee Shade', cursive; */
+  /* font-family: 'Butcherman', cursive; */
+  /* font-family: 'Faster One', cursive; */
+  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Noto Sans Mono', monospace; */
 }
 
+/* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
+                        NAVIGATION
+/*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
 .app-nav {
   background-color: var(--color4);
   margin: 0;
@@ -20,19 +34,23 @@ body {
   margin: auto;
   border: 2px inset #333;
 }
+
 .app-nav-list {
   display: flex;
   justify-content: space-around;
   margin: .4em auto;
   font-size: 12px;
 }
+
 .app-nav-item {
   list-style: none;
 }
+
 .app-nav-item a {
   color: white;
   text-decoration: none;
 }
+
 .app-nav-item a:visited {
   color: white;
 }
@@ -41,9 +59,18 @@ body {
                       `PAGE` COMPONENTS
 /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
 h1.page-title {
-  font-size: 20px;
-  color: var(--color3);
+  font-size: 30px;
+  color: var(--colorRed);
+  font-family: 'Blaka Ink', cursive;
+  filter: saturate(1900%);
+  /* -webkit-text-stroke: 1px var(--color0);
+  text-shadow: -.2px .2px .2px var(--color0),
+    .2px .2px .2px var(--color0),
+    .2px -.2px 0 var(--color0),
+    -.2px -.2px 0 var(--color0); */
 }
+
+
 .page-component {
   /* border: .3px solid var(--color0); */
   display: flex;
@@ -51,47 +78,101 @@ h1.page-title {
   min-height: 101vh;
   /* width: 95vw; */
   margin: .6px auto;
-}                                                                                                                                                                                                                                                                                             ````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
-.component {
-  border: 1px solid;
-  display: flex;
-  flex-direction: column;
 }
+
+
 
 
 /* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
                       `ELEMENT` COMPONENTS
 /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
+
+.component {
+  /* border: 1px solid; */
+  display: flex;
+  flex-direction: column;
+}
+
+/*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
+/* AUTOTABLE COMPONENT */
+/*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 h2.component-title {
   color: var(--color0);
   font-size: 14px;
   /* border: 2px solid; */
   margin: .5em 0 .5em 0;
 }
+
 .autotable-component {
   border-color: red;
   width: fit-content;
   margin: 0 auto 1em auto;
 }
+
 .auto-table {
   border-collapse: collapse;
   border: .5px double var(--color0);
   width: fit-content;
   margin: auto;
 }
+
 .auto-table th {
   font-size: 12px;
   border: .3px solid var(--color2);
   color: var(--color2);
   padding: .2em;
 }
+
 .auto-table td {
   padding: .3em .6em;
   text-align: left;
-  font-size: 12px;
+  font-size: 10px;
   border: .3px solid var(--color3);
 }
+
 /* this is sub-optimal. better if you could mark your auto-fields somehow.. */
-.auto-table td:last-child {
+/* .auto-table td:last-child {
   text-align: right;
+} */
+
+.auto-table td>a {
+  color: var(--color0);
+  text-decoration: none;
+}
+
+.auto-table td>a:visited {
+  color: var(--color0);
+  text-decoration: none;
+}
+
+/*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
+/* AUTOFORM COMPONENT */
+/*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
+img.client-img {
+  font-size: 10px;
+  margin-top: 1em;
+  border: .3px inset var(--color0);
+  border-radius: 6%;
+}
+.form-field {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  width: 24em;
+  /* max-width: fit-content; */
+  margin: .1em auto;
+  padding: .05em;
+  /* border: .2px solid var(--color2); */
+}
+.form-input {
+  margin: 0;
+  width: 74%;
+}
+.form-input-label {
+  font-size: 13px;
+  align-self: center;
+  text-align: right;
+  width: 5em;
+  /* border: solid aquamarine; */
+  margin: 0 1em 0 0;
 }

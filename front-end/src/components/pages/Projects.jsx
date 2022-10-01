@@ -8,8 +8,8 @@ function Projects(props) {
   React.useEffect(() => {
     const getProjects = async () => {
       const projectsFromServer = await fetchProjects()
-      console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
-      console.log(`linkFields = ${linkFields}`)
+      // console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
+      // console.log(`linkFields = ${linkFields}`)
       setProjects(projectsFromServer)
     }
     getProjects();
@@ -37,7 +37,7 @@ function Projects(props) {
 
       {
         projects ?
-          <AutoTable title="all projects" linkFields={linkFields} documents={projects}></AutoTable>
+          <AutoTable model="project" linkFields={linkFields} documents={projects}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }

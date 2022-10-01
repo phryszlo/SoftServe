@@ -1,32 +1,94 @@
 import React from 'react'
 
-const AutoTable = ({ documents, title, linkFields }) => {
-  const [fields, setFields] = React.useState(
+const AutoTable = ({ documents, model, linkFields }) => {
+
+  const fields =
     documents && documents.length > 0
       ? Object.keys(documents[0])
       : []
-  );
 
+  let current_id = "63334d4c99b7d70f32220120";
 
+  // '_id' was removed from excludeFields to be used in link generator
   const excludeFields = [
-    '_id', 'id', '__v'
+    'id', '__v', 'image_url'
   ];
 
+  console.log(`${model} docs = ${documents}`)
+  console.log(`${model} fields = ${fields}`)
 
-  // documents.map((object, index) => {
-  //   console.log(`this object : ${Object.entries(object)[0][0]}..., ${Object.entries(object)[0][1]}`);
-  // });
+  const renderTD = (field, doc, colIndex) => {
+    if (field === '_id') {
+      current_id = Object.values(doc)[colIndex];
+      console.log(current_id)
+      return '';
+    }
+    return (
+      <td
+        key={`td-${colIndex}`}
+        style={field === 'phone' ? { textAlign: "right" } : {}}
+      >
+        {/* so. how to know which route to link to? singular of the all[Enitys] name? */}
+        {/* LINK-FIELD TERNARY */}
+        {linkFields && linkFields.length > 0 && linkFields.indexOf(field) >= 0
+          ?
 
-  console.log(`${title} docs = ${documents}`)
-  console.log(`${title} fields = ${fields}`)
+          <a className="td-link" href={`/client/${current_id}`}>
 
+            {/* DATE FIELD TERNARY */}
+            {/* // is this a date field? if so, format it. */}
+            {/* {typeof ((Object.values(doc)[colIndex]) !== "object") || (field.endsWith('_date')) */}
+            {field.endsWith('_date')
+              ?
 
+              `${new Date(Object.values(doc)[colIndex]).toDateString()}`
+
+              // {/* IS OBJECT TERNARY (avoids the Objects are not allowed as React children error)*/}
+              // it's not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.) 
+              : typeof (Object.values(doc)[colIndex]) === "object"
+                ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
+                  Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
+
+                // {/* DEFAULT CONDITION OF DATE/OBJECT TERNARY */}
+                // no, it's what? a literal or primitive? this is the default. 
+                // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
+                : Object.values(doc)[colIndex]
+            }
+            {/* END OF DATE FIELD TERNARY */}
+          </a>
+
+          // linkFields did not contain the field: this should contain the value as not-a-link
+          :
+
+          // {/* i regret to have to repeat that whole section again */}
+
+          // {/* DATE FIELD TERNARY */ }
+          field.endsWith('_date')
+            ?
+
+            `${new Date(Object.values(doc)[colIndex]).toDateString()}`
+
+            // {/* IS OBJECT TERNARY (avoids the Objects are not allowed as React children error)*/}
+            // it's not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.)
+            : typeof (Object.values(doc)[colIndex]) === "object"
+              ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
+                Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
+
+              // {/* DEFAULT CONDITION OF DATE/OBJECT TERNARY */}
+              // no, it's what? a literal or primitive? this is the default.
+              // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
+              : Object.values(doc)[colIndex]
+        }
+        {/* END OF LINK-FIELD TERNARY */}
+      </td>
+    )
+  }
 
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
     <div className="component autotable-component">
-      <h2 className="component-title">{title}</h2>
+      <h2 className="component-title">{model}</h2>
 
       {documents && documents.length > 0
         ?
@@ -36,7 +98,7 @@ const AutoTable = ({ documents, title, linkFields }) => {
             <tr>
               {fields.map((field, index) => {
                 return (
-                  excludeFields.indexOf(field) < 0
+                  excludeFields.indexOf(field) < 0 && field !== '_id'
                     ?
 
                     <th key={`th-${index}`}>
@@ -49,68 +111,19 @@ const AutoTable = ({ documents, title, linkFields }) => {
             </tr>
           </thead>
           <tbody>
+
             {documents.map((doc, rowIndex) => {
               return (
                 <tr key={`tr-${rowIndex}`}>
 
                   {fields.map((field, colIndex) => {
-                    console.log(excludeFields, field)
                     return (
                       excludeFields.indexOf(field) < 0
-                        ?
-                        <td
-                          key={`td-${colIndex}`}
-                          style={field === 'phone' ? { textAlign: "right" } : {}}
-                        >
-                          {linkFields.indexOf(field) >= 0
-                            ?
-
-                            <a className="td-link" href={`/projects`}>
-
-                              {/* // is this a date field? if so, format it. */}
-                              {field.endsWith('_date')
-                                ?
-
-                                `${new Date(Object.values(doc)[colIndex]).toDateString()}`
-
-                                // ok, not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.) 
-                                : typeof (Object.values(doc)[colIndex]) === "object"
-                                  ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
-                                    Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
-
-                                  // no, it's what? a literal or primitive? this is the default. 
-                                  // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
-                                  : Object.values(doc)[colIndex]
-                              }
-                            </a>
-
-                            // linkFields did not contain the field: this should contain the value as not-a-link
-                            :
-
-                            // again, is this a date field? if so, format it.
-                            field.endsWith('_date')
-                              ?
-
-                              `${new Date(Object.values(doc)[colIndex]).toDateString()}`
-
-                              // ok, not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.) 
-                              : typeof (Object.values(doc)[colIndex]) === "object"
-                                ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
-                                  Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
-
-                                // no, it's what? a literal or primitive? this is the default. 
-                                // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
-                                : Object.values(doc)[colIndex]
-                          }
-
-
-                        </td>
-
-                        // excludeFields contained the field: render nothing
+                        ? renderTD(field, doc, colIndex)
                         : ''
-
                     )
                   })}
+
                 </tr>
               )
             })}
