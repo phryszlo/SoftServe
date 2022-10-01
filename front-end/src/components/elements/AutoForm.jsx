@@ -8,6 +8,12 @@ const AutoForm = ({ title, document }) => {
   const [newOrderDate, setNewOrderDate] = React.useState(null);
   const [newPromiseDate, setNewPromiseDate] = React.useState(null);
 
+  React.useEffect(() => {
+    console.log('usin effect')
+    console.log(
+      `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
+  })
+
   const fields =
     document ? Object.keys(document)
       : []
@@ -19,6 +25,8 @@ const AutoForm = ({ title, document }) => {
   console.log('fields=', fields)
 
 
+
+
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔺🔺🔺🔺
   const renderFormInput = (docKey, docVal) => {
     // console.log(`docKey= ${docKey} docVal=${docVal}`);
@@ -28,40 +36,40 @@ const AutoForm = ({ title, document }) => {
       // STRINGS
       case "string":
         // quick way to check if this is actually a datestring
-        let isDate = (new Date(docVal).getDay());
-        let useAsDate = docKey !== 'createdAt' && docKey !== 'updatedAt';
+        let isDate = (new Date(docVal).getMonth());
+        let useAsDate = isDate && (docKey !== 'createdAt' && docKey !== 'updatedAt');
         const strLen = docVal.length;
 
         // DATE STRING
-        if (isDate && useAsDate) {
+        if (useAsDate) {
           return (
-            <>
+            <React.Fragment>
               <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
 
               <DateTimePicker
                 className="form-input date-time-picker"
-                defaultValue={docVal}
+                defaultValue={console.log(
+                  `docval to string ${docVal.toString()} docKey ${docKey}
+                  newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`
+                ) && `${docVal.toString()}`}
                 value={
-                  newOrderDate && docKey === 'order_date' 
-                  ? newOrderDate
-                  : newPromiseDate && docKey === 'promise_date'
-                    ? newPromiseDate
-                    : {docVal}
+                  newOrderDate !== null && docKey === 'order_date'
+                    ? newOrderDate
+                    : newPromiseDate !== null && docKey === 'promise_date'
+                      ? newPromiseDate
+                      : '1973/09/20 08:04:20' //`${docVal}`
                 }
                 sx={{
                   width: 400,
                   color: 'success.main',
                   backgroundColor: 'white'
                 }}
-                onChange={(newValue) => {
-                  switch(docKey){
-                    case 'order_date':
-                      setNewOrderDate(newValue);
-                    case 'promise_date':
-                      setNewPromiseDate(newPromiseDate);
-                  } 
-                  console.log(`${newValue}`);
-                }}
+                onChange={
+                  docKey === 'order_date'
+                    ? setNewOrderDate
+                    : setNewPromiseDate
+                }
+
                 renderInput={(params) => (
                   <React.Fragment>
                     <TextField
@@ -80,23 +88,25 @@ const AutoForm = ({ title, document }) => {
                   </React.Fragment>
                 )}
               />
-            </>
+            </React.Fragment>
           )
+
         }
         else {
           // LONG STRING
           if (strLen > 40) {
-            return (<>
-              <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
-              <textarea
-                className="form-input form-textarea-input"
-                name={docKey}
-                id={`form-input-${docKey}`}
-                cols="30"
-                rows={Math.ceil(strLen / 30)}
-                defaultValue={docVal}>
-              </textarea>
-            </>
+            return (
+              <>
+                <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
+                <textarea
+                  className="form-input form-textarea-input"
+                  name={docKey}
+                  id={`form-input-${docKey}`}
+                  cols="30"
+                  rows={Math.ceil(strLen / 30)}
+                  defaultValue={docVal}>
+                </textarea>
+              </>
             )
           }
           // SHORT STRING
