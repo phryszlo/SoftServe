@@ -49,14 +49,14 @@ const AutoForm = ({ title, document }) => {
                 renderInput={(params) => (
                   <React.Fragment>
                     <TextField
-                    className="form-input"
+                      className="form-input"
                       {...params}
                       size="small"
                       sx={{
                         width: { sm: 270, md: 320 },
                         "& .MuiInputBase-root": {
-                            height: 26,
-                            fontSize: 14
+                          height: 26,
+                          fontSize: 14
                         }
                       }}
                     />
@@ -97,10 +97,10 @@ const AutoForm = ({ title, document }) => {
                     isDate ?
                       `${new Date(docVal).toDateString()} ${new Date(docVal).toLocaleTimeString('en-US')}`
                       :
-                    docVal
+                      docVal
                   }
                   disabled={isDate ? true : false}
-                  />
+                />
               </>
             )
           }
@@ -133,11 +133,15 @@ const AutoForm = ({ title, document }) => {
               <label className="form-input-label"></label>
               {/* <p className="comment">{docKey}</p> */}
               {
-                Object.entries(docVal).forEach((key, val) => {
+                Object.entries(docVal).forEach(([key, val], index) => {
                   return (
                     <>
-                      <label className="form-input-label" htmlFor={`form-input-${docKey}-${key}`}>{key}</label>
+                      <label
+                        key={`label-${key}-${index}`}
+                        className="form-input-label"
+                        htmlFor={`form-input-${docKey}-${key}`}>{key}</label>
                       <input
+                        key={`input-${key}-${index}`}
                         id={`form-input-${docKey}-${key}`}
                         type="text"
                         className="form-input form-text-input"

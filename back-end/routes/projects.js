@@ -184,7 +184,7 @@ router.get('/:id', (req, res) => {
     // const foundProject = await 
     // Projects.findOne({_id: "6335b4a38afbbf4ba6608f81"}, " -__v -createdAt -updatedAt")//.findById("6335b4a38afbbf4ba6608f81")
     //   .populate({ path: 'client', options: { select: { 'name': 1 } } })
-    Projects.findById('6335b4a38afbbf4ba6608f81')
+    Projects.findById(req.params.id)
       .populate('client') //{ path: 'client', options: { select: { 'name': 1 } } })
       .then((foundProject) => {
         const projectClient = foundProject.client;

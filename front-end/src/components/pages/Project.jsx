@@ -1,5 +1,6 @@
 import React from 'react';
 import AutoForm from '../elements/AutoForm';
+import SubDisplay from '../elements/SubDisplay';
 import { json, useLocation } from 'react-router-dom';
 
 // i read something saying arrow function declarations don't give you access to `this`. 
@@ -76,28 +77,26 @@ const Project = ({ document, title }) => {
   // RETURN()
   // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
   return (
-    <div>
-      {/* <img
-        className="project-img"
-        src={image_url ? image_url : ''}
-        width="150px"
-        alt={`fake image courtesy 'www.thispersondoesnotexist.com' (unless you are reading this alt tag)`} /> */}
+    <div className="project-page-wrapper">
       <h1 className="component-title">{title}</h1>
-      <AutoForm document={project} title={nameTitle} />
+      <AutoForm document={project} title={`${nameTitle}`} />
       <div className="project-client-wrapper">
-        <img
+        {/* <img
           src={imgUrl ? imgUrl : ''}
           alt=""
-          className="project-client-img" />
-        {/* <AutoForm document={projectClient} title={'client for project'}></AutoForm> */}
-        {/* <ul className="project-client-details" style={{ border: '2px solid green' }}> */}
-        {projectClient && Object.entries(projectClient).forEach((entry) => {
-          console.log(`projClient tostring ${JSON.stringify(projectClient)}`)
-          console.log(`the entry = ${entry[1]}`)
-          return (
-            <p>{entry}</p>
-          )
-        })}
+          className="project-client-img" /> */}
+        <div className="project-client-sub-wrapper">
+          {/* <AutoForm document={projectClient} title={'client for project'}></AutoForm> */}
+          <SubDisplay document={projectClient} title={'client for project'}></SubDisplay>
+          {/* <ul className="project-client-details" style={{ border: '2px solid green' }}> */}
+          {projectClient && Object.entries(projectClient).forEach((entry) => {
+            console.log(`projClient tostring ${JSON.stringify(projectClient)}`)
+            console.log(`the entry = ${entry[1]}`)
+            return (
+              <p style={{ color: "white" }}>{entry[1]}</p>
+            )
+          })}
+        </div>
 
         {/* </ul> */}
       </div>

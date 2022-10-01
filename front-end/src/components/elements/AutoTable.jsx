@@ -8,6 +8,7 @@ const AutoTable = ({ documents, model, linkFields }) => {
       : []
 
   let current_id = "63334d4c99b7d70f32220120";
+  let current_sub_id = "63334d4c99b7d70f32220120";
 
   // '_id' was removed from excludeFields to be used in link generator
   const excludeFields = [
@@ -17,12 +18,21 @@ const AutoTable = ({ documents, model, linkFields }) => {
   console.log(`${model} docs = ${documents}`)
   console.log(`${model} fields = ${fields}`)
 
+
+  // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻
   const renderTD = (field, doc, colIndex) => {
     if (field === '_id') {
       current_id = Object.values(doc)[colIndex];
       console.log(current_id)
       return '';
     }
+
+    // this is bad. this is pre-populated for the projects sub = 'client'.
+    if (field === 'client') {
+      console.log(`field eqd client: ${Object.values(doc)[colIndex].id}`);
+      current_sub_id = Object.values(doc)[colIndex].id
+    }
+
     return (
       <td
         key={`td-${colIndex}`}
@@ -33,12 +43,13 @@ const AutoTable = ({ documents, model, linkFields }) => {
         {linkFields && linkFields.length > 0 && linkFields.indexOf(field) >= 0
           ?
 
-          <a className="td-link" href={`/${model}/${current_id}`}>
+          <a className="td-link" href={field === 'client' ? `/${field}/${current_sub_id}` : `/${model}/${current_id}`}>
 
             {/* DATE FIELD TERNARY */}
             {/* // is this a date field? if so, format it. */}
             {/* {typeof ((Object.values(doc)[colIndex]) !== "object") || (field.endsWith('_date')) */}
-            {field.endsWith('_date')
+            {/* {field.endsWith('_date') let isDate =  */}
+            {new Date(Object.values(doc)[colIndex]).getDay()
               ?
 
               `${new Date(Object.values(doc)[colIndex]).toDateString()}`
