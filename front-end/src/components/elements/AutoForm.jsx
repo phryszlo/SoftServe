@@ -57,7 +57,7 @@ const AutoForm = ({ title, document }) => {
                     ? newOrderDate
                     : newPromiseDate !== null && docKey === 'promise_date'
                       ? newPromiseDate
-                      : '1973/09/20 08:04:20' //`${docVal}`
+                      : `${docVal}`
                 }
                 sx={{
                   width: 400,
@@ -90,8 +90,8 @@ const AutoForm = ({ title, document }) => {
               />
             </React.Fragment>
           )
-
         }
+        
         else {
           // LONG STRING
           if (strLen > 40) {
