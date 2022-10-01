@@ -47,7 +47,7 @@ function Projects(props) {
 }
 
 Projects.defaultProps = {
-  title: `Moe's software package projectéle`,
+  title: `Moe's Software Services Projectéle`,
 }
 
 export default Projects

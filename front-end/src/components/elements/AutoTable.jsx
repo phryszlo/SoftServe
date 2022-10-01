@@ -33,7 +33,7 @@ const AutoTable = ({ documents, model, linkFields }) => {
         {linkFields && linkFields.length > 0 && linkFields.indexOf(field) >= 0
           ?
 
-          <a className="td-link" href={`/client/${current_id}`}>
+          <a className="td-link" href={`/${model}/${current_id}`}>
 
             {/* DATE FIELD TERNARY */}
             {/* // is this a date field? if so, format it. */}
@@ -140,6 +140,7 @@ const AutoTable = ({ documents, model, linkFields }) => {
 
 AutoTable.defaultProps = {
   title: 'autotable',
+  model: 'client',
   documents: [
     {
       name: 'Emmanuel Parisian',

@@ -47,7 +47,7 @@ function Clients(props) {
 }
 
 Clients.defaultProps = {
-  title: `Moe's software package clientéle`,
+  title: `Moe's Software Services Clientéle`,
 }
 
 export default Clients

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Blaka+Ink&family=Bungee+Shade&family=Butcherman&family=Faster+One&family=Montserrat:wght@300;400&family=Noto+Sans+Mono:wght@300&display=swap');
 :root {
   --color0: #9ff;
-  --color1: rgb(230, 253, 185, 0.92);
+  --color1: rgb(43, 228, 249);
   --color2: rgba(255, 153, 116, 0.92);
   --color3: rgba(46, 219, 150, 0.92);
   --color4: rgba(46, 119, 200, 0.88);
@@ -97,7 +97,7 @@ h1.page-title {
 /* AUTOTABLE COMPONENT */
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 h2.component-title {
-  color: var(--color0);
+  color: var(--color1);
   font-size: 14px;
   /* border: 2px solid; */
   margin: .5em 0 .5em 0;
@@ -148,8 +148,17 @@ h2.component-title {
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 /* AUTOFORM COMPONENT */
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
+.auto-form {
+  position: relative;
+  left: -.8em;
+  border: .2px inset white;
+  width: fit-content;
+  margin: auto;
+}
 img.client-img {
   font-size: 10px;
+  height: 150px;
+  width: 150px;
   margin-top: 1em;
   border: .3px inset var(--color0);
   border-radius: 6%;
@@ -157,22 +166,45 @@ img.client-img {
 .form-field {
   display: flex;
   justify-content: center;
-  /* align-items: center; */
-  width: 24em;
+  align-items: flex-start;
+  width: 22em;
   /* max-width: fit-content; */
   margin: .1em auto;
   padding: .05em;
   /* border: .2px solid var(--color2); */
 }
-.form-input {
+.form-input, .comment {
   margin: 0;
   width: 74%;
 }
+/* .comment::before {
+  content: '\00a0 \00a0 \00a0 \00a0 \00a0 \00a0 \00a0';
+} */
+
 .form-input-label {
   font-size: 13px;
   align-self: center;
   text-align: right;
-  width: 5em;
+  width: 8em;
+  color: var(--color2);
   /* border: solid aquamarine; */
   margin: 0 1em 0 0;
+}
+.date-time-picker
+{
+  background-color: white;
+  /* min-width: 100%; */
+}
+
+.project-client-wrapper {
+  
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.project-client-img {
+  position: relative;
+  top: 2em;
+  width: 80px;
+  height: 80px;
 }

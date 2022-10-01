@@ -8,7 +8,7 @@ const { generateSlug } = require("random-word-slugs");
 
 const Clients = require('../models/client');
 const Projects = require('../models/project');
-const { Mongoose } = require('mongoose');
+// const { Mongoose } = require('mongoose');
 
 
 /*
@@ -159,23 +159,63 @@ router.get('/delete/:q', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     console.log('projects root route')
-    const allProjects = await Projects.find({}, " -__v -createdAt -updatedAt"
-    )
-      // {
-      //   $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'clientele' }
-      // }
-      // the {path:, select:} props refer to a virtual in the schema
-      .populate({ path: 'client_name', options: { select:  {'name': 1}  } })
+    const allProjects = await Projects.find({}, " -__v -createdAt -updatedAt")
+      .populate({ path: 'client', options: { select: { 'name': 1 } } })
+    // {
+    //   $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'clientele' }
+    // }
+    // the {path:, select:} props refer to a virtual in the schema
 
     // .aggregate()//.lookup({ from: 'clients', localField: 'client', foreignField: '_id', as: 'clientele' });
 
-    console.log(`${allProjects.length} products returned`);
+    console.log(`${allProjects.length} projects returned`);
     res.json({ links: ['title', 'client'], allProjects });
   }
   catch (err) {
     res.status(400).json({ success: false, message: 'general failure' });
   }
 })
+
+// GET ONE
+router.get('/:id', (req, res) => {
+  console.log(`projects/${req.params.id} reached`);
+  try {
+    // const foundProject = await Projects.findOne({}, " -__v -createdAt -updatedAt")
+    // const foundProject = await 
+    // Projects.findOne({_id: "6335b4a38afbbf4ba6608f81"}, " -__v -createdAt -updatedAt")//.findById("6335b4a38afbbf4ba6608f81")
+    //   .populate({ path: 'client', options: { select: { 'name': 1 } } })
+    Projects.findById('6335b4a38afbbf4ba6608f81')
+      .populate('client') //{ path: 'client', options: { select: { 'name': 1 } } })
+      .then((foundProject) => {
+        const projectClient = foundProject.client;
+        console.log(`projectClient is ${projectClient}`);
+        console.log(`foundProject is ${foundProject}`);
+        res.json({"project": foundProject, "project_client": foundProject.client});
+      })
+
+  }
+  catch (err) {
+    res.status(400).json({ success: false, message: `we don't know` });
+
+  }
+});
+
+// .then((err, foundProject) => {
+//   err && res.status(400).json({ success: false, message: err });
+//   console.log(`foundProject is ${foundProject}`);
+//   res.json(foundProject);
+// })
+// .catch((err) => {
+//   res.status(400).json({ success: false, message: err });
+// });
+// await Projects.findById(req.params.id)
+//   .then((project) => {
+//     res.json({ 'project': project });
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//     res.status(400).json({ success: false, message: err.message });
+//   })
 
 // router.get('/', async (req, res) => {
 //   try {
@@ -207,27 +247,17 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   await Projects.findByIdAndRemove(req.params.id)
-    .then(() => {
-      res.status(201).json({ success: true });
+    .then((err, removed) => {
+      err && res.status(400).json({ success: false, message: `delete attempt failed. received ${req.params.id}` });
+      res.status(201).json({ success: true, message: `delete succeeded for ${removed.id}` });
     })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json({ success: false, message: err.message });
-    })
+  // .catch((err) => {
+  //   console.log(err);
+  //   res.status(400).json({ success: false, message: err.message });
+  // })
 })
 
-// =========PLAYER: GET ONE BY ID ============
-router.get('/:id', async (req, res) => {
 
-  await Projects.findById(req.params.id)
-    .then((project) => {
-      res.json({ 'project': project });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json({ success: false, message: err.message });
-    })
-});
 
 
 router.put('/:id', async (req, res) => {

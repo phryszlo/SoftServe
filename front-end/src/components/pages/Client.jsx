@@ -7,7 +7,9 @@ const Client = ({ document }) => {
   const [client, setClient] = React.useState(null);
 
   const location = useLocation();
+
   const current_id = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+
 
   const imgEntry = client
     ? Object.entries(client).find(([key, value]) => key === 'image_url')
@@ -23,12 +25,15 @@ const Client = ({ document }) => {
   console.log(`client.jsx: document: ${document}`);
 
   React.useEffect(() => {
-
+    console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
     const getClient =
       current_id && current_id !== '' ?
         async () => {
           try {
-            const clientFromServer = await fetchClient()
+            // this ternary allows an empty /:id path to use the default props document
+            const clientFromServer = current_id === 'client' 
+              ? document
+              : await fetchClient()
             console.log(`clientFromServer = ${Object.values(clientFromServer)}`)
             setClient(clientFromServer)
           }
@@ -38,7 +43,7 @@ const Client = ({ document }) => {
         }
         : ''
 
-    getClient();
+        getClient();
 
   }, []);
 
@@ -67,6 +72,17 @@ const Client = ({ document }) => {
       <AutoForm document={client} title={nameTitle} />
     </div>
   )
+}
+
+Client.defaultProps = {
+  title: `clientele form`,
+  document: {
+    name: 'Jim Bode',
+    email: 'Jim.Bode@gmail.com',
+    phone: '(790) 291-1596',
+    image_url: 'http://www.thispersondoesnotexist.com/image',
+    foo: false
+  }
 }
 
 export default Client;

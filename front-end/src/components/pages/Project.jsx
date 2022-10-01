@@ -1,0 +1,119 @@
+import React from 'react';
+import AutoForm from '../elements/AutoForm';
+import { json, useLocation } from 'react-router-dom';
+
+// i read something saying arrow function declarations don't give you access to `this`. 
+const Project = ({ document, title }) => {
+  const [project, setProject] = React.useState(null);
+  const [projectClient, setProjectClient] = React.useState(null);
+  const [imgUrl, setImgUrl] = React.useState(null);
+  const location = useLocation();
+
+  const current_id = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+
+
+  // const imgEntry = project
+  //   ? Object.entries(project).find(([key, value]) => key === 'image_url')
+  //   : null;
+
+  // const image_url = imgEntry ? imgEntry[1] : '';
+  const nameEntry = project
+    ? Object.entries(project).find(([key, value]) => (key === 'name' || key === 'title'))
+    : null;
+
+  const nameTitle = nameEntry ? nameEntry[1] : '';
+  console.log(`project.jsx: current_id = ${current_id}`)
+  console.log(`project.jsx: document: ${document}`);
+
+  React.useEffect(() => {
+    console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
+    const getProject =
+      current_id && current_id !== '' ?
+        async () => {
+          try {
+            console.log(`what is the id? ${current_id}`)
+            // this ternary allows an empty /:id path to use the default props document
+            const projectFromServer = current_id === 'project'
+              ? document
+              : await fetchProject()
+            // console.log(`projectFromServer = ${Object.values(projectFromServer).allProjects}`)
+            console.log(`projectFromServer = ${Object.values(Object.values(projectFromServer.project))}`)
+            setProject(projectFromServer.project);
+            console.log(`projectClientFromserver = ${Object.values(Object.values(projectFromServer.project_client))}}`)
+            setProjectClient(projectFromServer.project_client);
+            setImgUrl(projectFromServer.project_client
+              // ? Object.entries(projectFromServer.project_client).find(([key, value]) => key === 'image_url')
+              ? projectFromServer.project_client.image_url
+              : null)
+          }
+          catch (err) {
+            console.log(`getProject err: i can't read err`);
+          }
+        }
+        : ''
+
+    getProject();
+
+  }, []);
+
+  const fetchProject = async () => {
+    try {
+      const res = await fetch(`/api/projects/${current_id}`);
+      // console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
+      const data = await res.json()
+
+      console.log(`data from api/projects/:id = ${data}`);
+
+      return data;
+    }
+    catch (err) {
+      console.log(`fetchProject err: no idea`);
+    }
+  }
+
+
+
+  // RETURN()
+  // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
+  return (
+    <div>
+      {/* <img
+        className="project-img"
+        src={image_url ? image_url : ''}
+        width="150px"
+        alt={`fake image courtesy 'www.thispersondoesnotexist.com' (unless you are reading this alt tag)`} /> */}
+      <h1 className="component-title">{title}</h1>
+      <AutoForm document={project} title={nameTitle} />
+      <div className="project-client-wrapper">
+        <img
+          src={imgUrl ? imgUrl : ''}
+          alt=""
+          className="project-client-img" />
+        {/* <AutoForm document={projectClient} title={'client for project'}></AutoForm> */}
+        {/* <ul className="project-client-details" style={{ border: '2px solid green' }}> */}
+        {projectClient && Object.entries(projectClient).forEach((entry) => {
+          console.log(`projClient tostring ${JSON.stringify(projectClient)}`)
+          console.log(`the entry = ${entry[1]}`)
+          return (
+            <p>{entry}</p>
+          )
+        })}
+
+        {/* </ul> */}
+      </div>
+    </div>
+  )
+}
+
+Project.defaultProps = {
+  title: `project`,
+  document: {
+    name: 'Jim Bode',
+    email: 'Jim.Bode@gmail.com',
+    phone: '(790) 291-1596',
+    image_url: 'http://www.thispersondoesnotexist.com/image',
+    foo: false
+  }
+}
+
+export default Project;
