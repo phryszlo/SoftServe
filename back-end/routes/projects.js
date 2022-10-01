@@ -66,26 +66,26 @@ router.get('/seed/:q', async (req, res) => {
   let clientIds = [];
 
   try {
-      // generate fake data from faker and random-word-slugs libs
-      for (let i = 0; i < req.params.q; i++) {
-        let rndIdx = Math.floor(Math.random() * clientIds.length);
-        console.log(`rndIdx = ${rndIdx}`)
-        let p = {};
-        let title = generateSlug(4, { format: "title" });
-        let orderDate = faker.date.between("2022-01-01", Date.now())
-        let promiseDate = faker.date.future();
-        p.title = title;
-        p.order_date = orderDate;
-        p.promise_date = promiseDate;
-        fakes.push(p);
-      }
+    // generate fake data from faker and random-word-slugs libs
+    for (let i = 0; i < req.params.q; i++) {
+      let rndIdx = Math.floor(Math.random() * clientIds.length);
+      console.log(`rndIdx = ${rndIdx}`)
+      let p = {};
+      let title = generateSlug(4, { format: "title" });
+      let orderDate = faker.date.between("2022-01-01", Date.now())
+      let promiseDate = faker.date.future();
+      p.title = title;
+      p.order_date = orderDate;
+      p.promise_date = promiseDate;
+      fakes.push(p);
+    }
 
     // and assign them to existing projects
     await Projects.insertMany(fakes)
       .then((err, data) => {
         console.log(`projects created : ${data}`);
         err && res.status(400).json({ success: false, message: 'projs create errd' });
-        res.status(201).json({success: true, message: `${data.length} projects created`});
+        res.status(201).json({ success: true, message: `${data.length} projects created` });
       })
       .catch((error) => {
         res.status(400).json({ success: false, message: 'projs create errd .catch caught' });
@@ -136,7 +136,7 @@ router.get('/seed/:q/withclients', (req, res) => {
         (err, data) => {
           console.log(data);
           err && res.status(400).json({ success: false, message: 'projs create errd' });
-          res.status(201).json({success: true, message: `${data.length} projects created`});
+          res.status(201).json({ success: true, message: `${data.length} projects created` });
         })
 
     })
@@ -148,7 +148,7 @@ router.get('/seed/:q/withclients', (req, res) => {
 // #endregion
 
 
-router.get('/delete/:q', async(req,res) => {
+router.get('/delete/:q', async (req, res) => {
 
 })
 
@@ -156,22 +156,42 @@ router.get('/delete/:q', async(req,res) => {
 //`${new Date(promiseDate).toDateString()} ${new Date(promiseDate).toLocaleTimeString('en-US')}`;
 //`${new Date(createdAt).toDateString()} ${new Date(createdAt).toLocaleTimeString('en-US')}`;
 
-
 router.get('/', async (req, res) => {
   try {
     console.log('projects root route')
-    const allProjects = await Projects.find({}, "-__v -createdAt -updatedAt")
+    const allProjects = await Projects.find({}, " -__v -createdAt -updatedAt"
+    )
+      // {
+      //   $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'clientele' }
+      // }
       // the {path:, select:} props refer to a virtual in the schema
-      .populate({ path: 'client_name', select: 'name' });
+      .populate({ path: 'client_name', options: { select:  {'name': 1}  } })
+
+    // .aggregate()//.lookup({ from: 'clients', localField: 'client', foreignField: '_id', as: 'clientele' });
 
     console.log(`${allProjects.length} products returned`);
     res.json({ links: ['title', 'client'], allProjects });
   }
   catch (err) {
-    // res.status(400).json(obj)
-    res.status(400).json({ success: false, message: err });
+    res.status(400).json({ success: false, message: 'general failure' });
   }
 })
+
+// router.get('/', async (req, res) => {
+//   try {
+//     console.log('projects root route')
+//     const allProjects = await Projects.find({}, "-__v -createdAt -updatedAt")
+//       // the {path:, select:} props refer to a virtual in the schema
+//       .populate({ path: 'client_name', select: 'name' });
+
+//     console.log(`${allProjects.length} products returned`);
+//     res.json({ links: ['title', 'client'], allProjects });
+//   }
+//   catch (err) {
+//     // res.status(400).json(obj)
+//     res.status(400).json({ success: false, message: err });
+//   }
+// })
 
 
 router.post('/', async (req, res) => {

@@ -27,7 +27,7 @@ function Dashboard(props) {
       setClients(clientsFromServer)
     }
 
-    // getProjects();
+    getProjects();
     getClients();
 
   }, []);

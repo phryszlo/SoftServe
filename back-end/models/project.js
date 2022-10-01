@@ -37,8 +37,9 @@ projectSchema.virtual('task_count', {
 projectSchema.virtual('client_name', {
   ref: 'Client',
   localField: 'client',
-  foreignField: 'name',
-  justOne: true
+  foreignField: '_id',
+  justOne: true,
+  options: { select: 'name'},
 });
 
 projectSchema.set('toObject', { virtuals: true });
