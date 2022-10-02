@@ -65,18 +65,6 @@ const Client = ({ document }) => {
       // console.log(`res: ${Object.entries((key, entry) => key === 'allClients')}`);
       const data = await res.json()
 
-      // this is only a test. why is my proxy proxying in this component and proxying not in autoform?
-      // const settings = {
-      //   method: 'PUT',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: {}
-      // };
-      // const res2 = await fetch(`/api/clients/${current_id}`, settings);
-      // console.log(`res2 = ${res2}`)
-
       console.log(`Client.jsx : data from api/clients/:id = ${JSON.stringify(data)}`);
 
       return data;
@@ -86,8 +74,10 @@ const Client = ({ document }) => {
     }
   }
 
+  // RETURN()
+  // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
   return (
-    <div>
+    <div className=" page-wrapper client-page-wrapper">
       <img
         className="client-img"
         src={image_url ? image_url : ''}
@@ -96,7 +86,7 @@ const Client = ({ document }) => {
       <AutoForm
         keys={
           [
-            { _id: current_id ? current_id : '' },
+            { id: current_id ? current_id : '' },
             { name: '' },
             { email: '' },
             { phone: '' },

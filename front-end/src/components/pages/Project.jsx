@@ -23,16 +23,16 @@ const Project = ({ document, title }) => {
     : null;
 
   const nameTitle = nameEntry ? nameEntry[1] : '';
-  console.log(`project.jsx: current_id = ${current_id}`)
-  console.log(`project.jsx: document: ${document}`);
+  // console.log(`project.jsx: current_id = ${current_id}`)
+  // console.log(`project.jsx: document: ${document}`);
 
   React.useEffect(() => {
-    console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
+    // console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
     const getProject =
       current_id && current_id !== '' ?
         async () => {
           try {
-            console.log(`what is the id? ${current_id}`)
+            // console.log(`what is the id? ${current_id}`)
             // this ternary allows an empty /:id path to use the default props document
             const projectFromServer = current_id === 'project'
               ? document
@@ -77,9 +77,22 @@ const Project = ({ document, title }) => {
   // RETURN()
   // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
   return (
-    <div className="project-page-wrapper">
+    <div className=" page-wrapper project-page-wrapper">
       <h1 className="component-title">{title}</h1>
-      <AutoForm document={project} title={`${nameTitle}`} />
+      <AutoForm 
+      document={project} 
+      title={`${nameTitle}`} 
+      keys={
+        [
+          { id: current_id ? current_id : '' },
+          { title: '' },
+          { order_date: '' },
+          { promise_date: '' },
+          { client: '' },
+          { invoice: '' }
+        ]
+      }
+      />
       <div className="project-client-wrapper">
         {/* <img
           src={imgUrl ? imgUrl : ''}

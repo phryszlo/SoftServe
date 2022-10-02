@@ -11,7 +11,7 @@ const SubDisplay = ({ title, document }) => {
     document ? Object.keys(document)
       : []
 
-  console.log(`image_url = ${document && document.image_url}`);
+  // console.log(`image_url = ${document && document.image_url}`);
 
   // 🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺
   React.useEffect(() => {
@@ -21,8 +21,8 @@ const SubDisplay = ({ title, document }) => {
   const excludeFields = [
     '_id', 'id', '__v', 'image_url', 'updatedAt', 'createdAt'
   ];
-  console.log('doc=', document)
-  console.log('fields=', fields)
+  // console.log('doc=', document)
+  // console.log('fields=', fields)
 
 
 

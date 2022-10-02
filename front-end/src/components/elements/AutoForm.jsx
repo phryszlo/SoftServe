@@ -25,11 +25,19 @@ const AutoForm = ({ title, document, keys, route, id }) => {
     try {
       // setFields(document ? Object.keys(document)
       //   : [])
-      fields.forEach((field) => {
-        setFormVals((oldVals) => ({
-          ...oldVals, [field]: 'nothing'
-        }));
+      fields.forEach((field, index) => {
+        if (excludeFields.indexOf(field) < 0) {
+          setFormVals((oldVals) => (
+            {
+              ...oldVals, [field]: `what-the-${index}`
+            }
+          ));
+        }
       });
+
+      Object.entries(formVals).forEach(([key, value], index) => {
+        console.log(`af. useEff. formvals => ${key}:${value} [${index}]`)
+      })
     }
     catch (err) {
       console.log(`useEffect erred: ${err}`);
@@ -63,7 +71,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   };
 
 
-  //   🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
+  //🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
   const handleUpdateClick = async (e) => {
     e.preventDefault();
     // Navigate(0);
@@ -78,56 +86,70 @@ const AutoForm = ({ title, document, keys, route, id }) => {
         case 'name':
           console.log(`>>> it's name e.target.name.value = ${e.target.name.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.name.value }));
-            break;
-            
+            ({ ...currentVals, [Object.keys(obj)]: e.target.name.value }));
+          break;
+
         case 'email':
           console.log(`>>> it's name e.target.email.value = ${e.target.email.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.email.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.email.value }));
+          break;
 
         case 'phone':
           console.log(`>>> it's name e.target.phone.value = ${e.target.phone.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.phone.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.phone.value }));
+          break;
 
         case 'image_url':
           console.log(`>>> it's name e.target.image_url.value = ${e.target.image_url.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.image_url.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.image_url.value }));
+          break;
 
         case 'title':
           console.log(`>>> it's name e.target.title.value = ${e.target.title.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.title.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.title.value }));
+          break;
+
+        case 'order_date':
+          console.log(`>>> it's name e.target.order_date.value = ${e.target.order_date.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [Object.keys(obj)]: e.target.order_date.value }));
+          break;
+
+        case 'promise_date':
+          console.log(`>>> it's name e.target.promise_date.value = ${e.target.promise_date.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [Object.keys(obj)]: e.target.promise_date.value }));
+          break;
 
         case 'completed':
           console.log(`completed allegedly found in fields`);
           console.log(`>>> it's name e.target.completed.value = ${e.target.completed ? e.target.completed.value : ''}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.completed.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.completed.value }));
+          break;
 
         case 'budget_number':
           console.log(`>>> it's name e.target.budget_number.value = ${e.target.budget_number.value}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.budget_number.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.budget_number.value }));
+          break;
 
         case 'description':
           console.log(`>>> it's name e.target.description.value = ${e.target.name.description}`);
           setFormVals(currentVals =>
-            ({ ...currentVals, [obj.key]: e.target.description.value }));
-            break;
+            ({ ...currentVals, [Object.keys(obj)]: e.target.description.value }));
+          break;
 
       }
     })
 
-    Object.entries(formVals).forEach(([key, value]) => {
+    console.log(`formVals LENGTH = ${Object.values(formVals).length}`)
+    console.log(`formVals to JSON string: ${JSON.stringify(formVals)}`);
+    Object.entries(formVals).forEach(([key, value], index) => {
       console.log(`formVals A-GAIN ${key} ${value}`)
     })
 
@@ -186,11 +208,12 @@ const AutoForm = ({ title, document, keys, route, id }) => {
               <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
 
               <DateTimePicker
+
                 className="form-input date-time-picker"
-                defaultValue={console.log(
-                  `docval to string ${docVal.toString()} docKey ${docKey}
-                  newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`
-                ) && `${docVal.toString()}`}
+                // defaultValue={console.log(
+                //   `docval to string ${docVal.toString()} docKey ${docKey}
+                //   newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`
+                // ) && `${docVal.toString()}`}
                 value={
                   newOrderDate !== null && docKey === 'order_date'
                     ? newOrderDate
@@ -212,6 +235,13 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                 renderInput={(params) => (
                   <React.Fragment>
                     <TextField
+                      name={
+                        docKey === 'order_date'
+                          ? 'order_date'
+                          : docKey === 'promise_date'
+                            ? 'promise_date'
+                            : 'date'
+                      }
                       onChange={setFormVal(docKey)}
                       className="form-input"
                       {...params}
