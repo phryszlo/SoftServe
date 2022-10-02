@@ -8,22 +8,7 @@ const { generateSlug } = require("random-word-slugs");
 
 const Clients = require('../models/client');
 const Projects = require('../models/project');
-// const { Mongoose } = require('mongoose');
 
-
-/*
-app.post('/addPublisher', async (req, res) => {
-   try {
-      //validate req.body data before saving
-      const publisher = new Publisher(req.body);
-      await publisher.save();
-      res.status(201).json({success:true, data: publisher });
-
-   } catch (err) {
-      res.status(400).json({success: false, message:err.message});
-   }
-});
-*/
 
 // #region seed routes
 
@@ -186,11 +171,12 @@ router.get('/:id', (req, res) => {
     //   .populate({ path: 'client', options: { select: { 'name': 1 } } })
     Projects.findById(req.params.id)
       .populate('client') //{ path: 'client', options: { select: { 'name': 1 } } })
-      .then((foundProject) => {
-        const projectClient = foundProject.client;
+      .then((err, foundProject) => {
+        err && res.json({"project": err});
+        const projectClient = foundProject ? foundProject.client : '';
         console.log(`projectClient is ${projectClient}`);
         console.log(`foundProject is ${foundProject}`);
-        res.json({ "project": foundProject, "project_client": foundProject.client });
+        res.json({ "project": foundProject, "project_client": projectClient });
       })
 
   }
@@ -233,6 +219,20 @@ router.get('/:id', (req, res) => {
 //   }
 // })
 
+router.put('/:id', async (req, res) => {
+  Object.entries(req.body).forEach(([key, val], index) => {
+    console.log(`entry: ${key}: ${val}`);
+  })
+  console.log(`PUT: ${req.params.id} body: ${req.body}`);
+  return;
+  await Projects.findByIdAndUpdate(req.params.id, req.body)
+    .then((updatedProject) => {
+      res.json({ 'project': updatedProject });
+    })
+    .catch((err) => {
+      res.status(400).json({ success: false, message: err.message });
+    })
+})
 
 router.post('/', async (req, res) => {
   await Projects.create(req.body)
@@ -262,16 +262,19 @@ router.delete('/random/:q', async (req, res) => {
   }
 7})
 
-router.delete('/:id', async (req, res) => {
-  await Projects.findByIdAndRemove(req.params.id)
-    .then((err, removed) => {
-      err && res.status(400).json({ success: false, message: `delete attempt failed. received ${req.params.id}` });
-      res.status(201).json({ success: true, message: `delete succeeded for ${removed.id}` });
-    })
-  // .catch((err) => {
-  //   console.log(err);
-  //   res.status(400).json({ success: false, message: err.message });
-  // })
+router.delete('/:id', (req, res) => {
+  console.log(`project delete ${req.params.id} route.`);
+  try {
+    Projects.findByIdAndRemove(req.params.id)
+      .then((removed) => {
+        console.log(removed && JSON.stringify(removed));
+        // err && res.status(400).json({ success: false, message: `delete attempt failed. received ${req.params.id}` });
+        res.status(201).json({ success: true }); //, message: `delete succeeded for ${req.params.id}`
+      })
+  }
+  catch (err) {
+    err && res.status(400).json({ success: false, message: `delete attempt failed. ` });
+  }
 })
 
 
@@ -280,15 +283,7 @@ router.delete('/:id', async (req, res) => {
 
 
 
-router.put('/:id', async (req, res) => {
-  await Projects.findByIdAndUpdate(req.params.id, req.body)
-    .then((updatedProject) => {
-      res.json({ 'project': updatedProject });
-    })
-    .catch((err) => {
-      res.status(400).json({ success: false, message: err.message });
-    })
-})
+
 
 
 module.exports = router;

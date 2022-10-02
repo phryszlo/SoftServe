@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
-const AutoTable = ({ documents, model, linkFields }) => {
+
+const AutoTable = ({ documents, route, model, linkFields }) => {
 
   const fields =
     documents && documents.length > 0
@@ -15,6 +17,9 @@ const AutoTable = ({ documents, model, linkFields }) => {
     'id', '__v', 'image_url'
   ];
 
+  const navigate = useNavigate();
+
+
   // console.log(`${model} docs = ${documents}`)
   // console.log(`${model} fields = ${fields}`)
 
@@ -23,7 +28,6 @@ const AutoTable = ({ documents, model, linkFields }) => {
   const renderTD = (field, doc, colIndex) => {
     if (field === '_id') {
       current_id = Object.values(doc)[colIndex];
-      // console.log(current_id)
       return '';
     }
 
@@ -95,6 +99,31 @@ const AutoTable = ({ documents, model, linkFields }) => {
     )
   }
 
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    const rte = e.target.parentNode.parentNode.parentNode.parentNode.dataset.route;
+    // return;
+    const fetchOpts = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+    try {
+      fetch(`/api/${rte}/${current_id}`, fetchOpts)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`data from delete client ${current_id}: ${data}`);
+          // setUpdatingClients(true);
+        })
+      navigate(0);
+    }
+    catch (err) {
+      console.log(`delete random clients fails: ${err}`);
+    }
+  }
+
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
@@ -104,18 +133,16 @@ const AutoTable = ({ documents, model, linkFields }) => {
       {documents && documents.length > 0
         ?
 
-        <table className="auto-table">
+        <table className="auto-table" data-route={route}>
           <thead>
             <tr>
               {fields.map((field, index) => {
                 return (
                   excludeFields.indexOf(field) < 0 && field !== '_id'
                     ?
-
                     <th key={`th-${index}`}>
                       {field}
                     </th>
-
                     : ''
                 )
               })}
@@ -123,9 +150,9 @@ const AutoTable = ({ documents, model, linkFields }) => {
           </thead>
           <tbody>
 
-            {documents.map((doc, rowIndex) => {
+            {documents && documents.map((doc, rowIndex) => {
               return (
-                <tr key={`tr-${rowIndex}`}>
+                <tr key={`tr-${rowIndex}`} className="auto-table-row" data-id={current_id}>
 
                   {fields.map((field, colIndex) => {
                     return (
@@ -134,7 +161,14 @@ const AutoTable = ({ documents, model, linkFields }) => {
                         : ''
                     )
                   })}
-
+                  <td className="td-delete-btn">
+                    <button
+                      className="btn-delete btn-delete-one-client"
+                      onClick={handleDeleteClick}
+                    >
+                      del
+                    </button>
+                  </td>
                 </tr>
               )
             })}

@@ -37,7 +37,7 @@ function Projects(props) {
 
       {
         projects ?
-          <AutoTable model="project" linkFields={linkFields} documents={projects}></AutoTable>
+          <AutoTable model="project" route="projects" linkFields={linkFields} documents={projects}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }

@@ -1,6 +1,7 @@
 import React from 'react'
 import AutoTable from '../elements/AutoTable';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 function Dashboard(props) {
@@ -18,6 +19,7 @@ function Dashboard(props) {
   const qClientDelRef = React.useRef(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
 
 
@@ -101,17 +103,22 @@ function Dashboard(props) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+
         data && setClients(data.message)
+        navigate(0);
+
       });
   }
 
   const onSeedProjectsClick = (e) => {
     // setSeedClicks(seedClicks + 1);
-    fetch(`/api/projects/seed/${seedQ}`)
+    fetch(`/api/projects/seed/${seedQ}/withclients`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        data && setClients(data.message)
+        navigate(0);
+
+        // data && setProjects(data.message)
       });
   }
   const onDeleteRandomProjectsClick = (e) => {
@@ -130,9 +137,12 @@ function Dashboard(props) {
         .then((res) => res.json())
         .then((data) => {
           console.log(`data from delete random projects: ${data}`);
-          setUpdatingProjects(true);
+          // navigate(0);
+          // setUpdatingProjects(true);
 
         })
+      navigate(0);
+
     }
     catch (err) {
       console.log(`delete random projects fails: ${err}`);
@@ -154,8 +164,12 @@ function Dashboard(props) {
         .then((res) => res.json())
         .then((data) => {
           console.log(`data from delete random clients: ${data}`);
-          setUpdatingClients(true);
+          // navigate(0);
+          // setUpdatingClients(true);
+
         })
+      navigate(0);
+
     }
     catch (err) {
       console.log(`delete random clients fails: ${err}`);
@@ -202,13 +216,13 @@ function Dashboard(props) {
       </div>
       {
         projects ?
-          <AutoTable model="project" linkFields={projectLinkFields} documents={projects}></AutoTable>
+          <AutoTable model="project" route="projects" linkFields={projectLinkFields} documents={projects}></AutoTable>
           : <div className="no-table-here">no projects received</div>
 
       }
       {
         clients ?
-          <AutoTable model="client" linkFields={clientLinkFields} documents={clients} />
+          <AutoTable model="client" route="clients" linkFields={clientLinkFields} documents={clients} />
           : <div className="no-table-here">no clients received</div>
       }
 

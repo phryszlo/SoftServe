@@ -5,7 +5,7 @@ const clientSchema = new Schema({
   name: { type: String, required: true},
   email: { type: String, required: true },
   phone: { type: String, required: false },
-  image_url: { type: String, required: false, default: "https://www.thispersondoesnotexist.com/image" },
+  image_url: { type: String, required: false },
 },
   { timestamps: true });
 

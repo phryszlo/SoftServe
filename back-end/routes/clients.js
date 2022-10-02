@@ -18,9 +18,11 @@ router.get('/seed/:q', (req, res) => {
     let lastName = faker.name.lastName();
     let email = faker.internet.email(firstName, lastName);
     let phone = faker.phone.number();
+    let image_url = 'http://thispersondoesnotexist.com/image';
     c.name = `${firstName} ${lastName}`;
     c.email = email;
     c.phone = phone;
+    c.image_url = image_url;
     fakes.push(c);
   }
   Clients.create(fakes,
@@ -66,13 +68,16 @@ router.get('/:id', (req, res) => {
 
 
 router.put('/:id', async (req, res) => {
-  console.log(`put route api/client/:id => id=${req.params.id}`);
-
+  // Object.entries(req.body).forEach(([key, val], index) => {
+  //   console.log(`entry: ${key}: ${val}`);
+  // })
+  console.log(`clients PUT: ${req.params.id} body: ${JSON.stringify(req.body)}`);
   await Clients.findByIdAndUpdate(
     req.params.id, req.body,
-    { new: true, useFindAndModify: false }
+    { new: true }
   )
     .then((updatedClient) => {
+      console.log(`updatedClient = ${updatedClient}`)
       res.json({ 'client': updatedClient });
     })
     .catch((err) => {
@@ -107,17 +112,22 @@ router.delete('/random/:q', async (req, res) => {
     console.log(`delete random failed: ${err}`);
 
   }
-7})
+  7
+})
 
-router.delete('/:id', async (req, res) => {
-  await Clients.findByIdAndRemove(req.params.id)
-    .then(() => {
-      res.json({ 'success': true });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({ 'success': false });
-    })
+router.delete('/:id', (req, res) => {
+  console.log(`client delete ${req.params.id} route reached`);
+  try {
+    Clients.findByIdAndRemove(req.params.id)
+      .then((removed) => {
+        console.log(removed && JSON.stringify(removed));
+        // err && res.status(400).json({ success: false, message: `delete attempt failed. received ${req.params.id}` });
+        res.status(201).json({ success: true }); //, message: `delete succeeded for ${req.params.id}`
+      })
+  }
+  catch (err) {
+    err && res.status(400).json({ success: false, message: `delete attempt failed. ` });
+  }
 })
 
 

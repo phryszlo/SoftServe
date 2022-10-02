@@ -1,6 +1,8 @@
 import React from 'react';
 import AutoForm from '../elements/AutoForm';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 // i read something saying arrow function declarations don't give you access to `this`. 
 const Client = ({ document }) => {
@@ -14,7 +16,7 @@ const Client = ({ document }) => {
 
   // ///////////
   // console.log(`doc.leng = ${JSON.stringify(document)}`)
-
+  const navigate = useNavigate();
 
 
   // console.log(`document._id = ${client.id ? document.id : 'no doc._id'}  `)
@@ -82,7 +84,7 @@ const Client = ({ document }) => {
         className="client-img"
         src={image_url ? image_url : ''}
         width="150px"
-        alt={`fake image courtesy 'www.thispersondoesnotexist.com' (unless you are reading this alt tag)`} />
+        alt={`client image not found`} />
       <AutoForm
         keys={
           [

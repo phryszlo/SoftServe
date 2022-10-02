@@ -2,7 +2,9 @@ import React from 'react'
 // import { DateRangePicker, DateRange } from "@mui/x-date-pickers"
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
-import { Navigate, useNavigate } from 'react-router-dom';
+// import { Navigate, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const AutoForm = ({ title, document, keys, route, id }) => {
@@ -10,9 +12,13 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   const [newOrderDate, setNewOrderDate] = React.useState(null);
   const [newPromiseDate, setNewPromiseDate] = React.useState(null);
   const [formVals, setFormVals] = React.useState({});
+  const [updateNeeded, setUpdateNeeded] = React.useState(false);
+  const [firstLoad, setFirstLoad] = React.useState(true);
+
   // const [fields, setFields] = React.useState([]);
   const formRef = React.useRef(null);
 
+  const navigate = useNavigate();
 
 
   // next line learnt from:
@@ -23,8 +29,25 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   React.useEffect(() => {
     console.log('autoform usin effect')
     try {
-      // setFields(document ? Object.keys(document)
-      //   : [])
+      fields.forEach((field, index) => {
+        if (excludeFields.indexOf(field) < 0) {
+          setFormVals((oldVals) => (
+            { ...oldVals, [field]: `what-the-${index}` }
+          ));
+        }
+      });
+    }
+    catch (err) {
+      console.log(`useEffect erred: ${err}`);
+    }
+  }, [])
+
+
+  // this seems a much hacky manner of forcing this update to work.
+  React.useEffect(() => {
+    if (!updateNeeded) return;
+    console.log('updateNeeded usin effect')
+    try {
       fields.forEach((field, index) => {
         if (excludeFields.indexOf(field) < 0) {
           setFormVals((oldVals) => (
@@ -36,6 +59,56 @@ const AutoForm = ({ title, document, keys, route, id }) => {
       });
 
       Object.entries(formVals).forEach(([key, value], index) => {
+        console.log(`UPDATE NEEDED formvals => ${key}:${value} [${index}]`)
+      })
+
+      // THE PUT
+      // 'Content-Type': 'application/x-www-form-urlencoded'
+      // was the big ticket item here.
+      const putEdit =
+        async () => {
+          console.log(
+            `putEdit
+            formVals: ${JSON.stringify(formVals)}
+            formVals-length: ${Object.keys(formVals).length}`
+          );
+
+          try {
+            const body = {};
+            Object.entries(formVals).forEach(([key, value], index) => {
+              console.log(`nothing`);
+              if (index > 0) {
+                body[key] = value
+
+              }
+            });
+            console.log(`body: ${JSON.stringify(body)}`)
+
+            const fetchOpts = {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(body)
+            }
+            fetch(`/api/${route}/${id}`, fetchOpts)
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(`data from put projects/${id}: ${data}`);
+              })
+              navigate(0);
+          }
+          catch (err) {
+            console.log(`putEdit err: that was some sort of disaster. ${err}`);
+          }
+        }
+
+      putEdit();
+
+
+      setUpdateNeeded(false);
+
+      Object.entries(formVals).forEach(([key, value], index) => {
         console.log(`af. useEff. formvals => ${key}:${value} [${index}]`)
       })
     }
@@ -43,7 +116,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
       console.log(`useEffect erred: ${err}`);
     }
 
-  }, [])
+  }, [updateNeeded])
 
   // const fields =
   //   document ? Object.keys(document)
@@ -73,10 +146,10 @@ const AutoForm = ({ title, document, keys, route, id }) => {
 
   //🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
   const handleUpdateClick = async (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     // Navigate(0);
 
-    console.log(`update clicked ${e.currentTarget}`);
+    // console.log(`update clicked ${e.currentTarget}`);
 
     // the awfulest possibly way. but i am stuck.
     // Object.entries(fields).forEach(([key, value], index) => {
@@ -147,44 +220,18 @@ const AutoForm = ({ title, document, keys, route, id }) => {
       }
     })
 
-    console.log(`formVals LENGTH = ${Object.values(formVals).length}`)
-    console.log(`formVals to JSON string: ${JSON.stringify(formVals)}`);
-    Object.entries(formVals).forEach(([key, value], index) => {
-      console.log(`formVals A-GAIN ${key} ${value}`)
-    })
+    // console.log(`formVals LENGTH = ${Object.values(formVals).length}`)
+    // console.log(`formVals to JSON string: ${JSON.stringify(formVals)}`);
+    // Object.entries(formVals).forEach(([key, value], index) => {
+    //   console.log(`formVals A-GAIN ${key} = ${value}`)
+    // })
+    // Object.entries(formVals).forEach(([key, value], index) => {
+    //   console.log(`why no formvals => ${key}:${value} [${index}]`)
+    // })
 
-    // // console.log(`form.current =  ${formRef.current}`)
-    // // formRef.current.body.forEach((whatever) => {
-    // //   console.log(`form thing ${whatever}`);
-    // // })
 
-    // const putEdit =
+    setUpdateNeeded(true);
 
-    //   async () => {
-    //     console.log(`putEdit ${e.currentTarget} formVals: ${JSON.stringify(formVals)}`);
-
-    //     try {
-    //       // const returnFromServer = id === 'client'
-    //       //   ? document
-    //       //   : await updateModel(route, id);
-
-    //       // console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
-    //       // setClient(clientFromServer)
-
-    //       formVals && Object.entries(formVals).forEach(([el, thing], index) => {
-    //         console.log(`el: ${el} ${thing}`)
-    //       })
-    //       formVals &&
-    //         console.log(`anything: ${Object.entries(formVals)
-    //           .find(([el, thing], index) => el === 'name')}`);
-
-    //     }
-    //     catch (err) {
-    //       console.log(`putEdit err: that was some sort of disaster. ${err}`);
-    //     }
-    //   }
-
-    // putEdit();
 
   }
 

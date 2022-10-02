@@ -37,7 +37,7 @@ function Clients(props) {
 
       {
         clients ?
-          <AutoTable title="all clients" linkFields={linkFields} documents={clients}></AutoTable>
+          <AutoTable title="all clients" route="clients" linkFields={linkFields} documents={clients}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }

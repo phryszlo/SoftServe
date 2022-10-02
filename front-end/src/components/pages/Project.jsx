@@ -2,6 +2,8 @@ import React from 'react';
 import AutoForm from '../elements/AutoForm';
 import SubDisplay from '../elements/SubDisplay';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 
 // i read something saying arrow function declarations don't give you access to `this`. 
 const Project = ({ document, title }) => {
@@ -12,6 +14,7 @@ const Project = ({ document, title }) => {
 
   const current_id = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
+  const navigate = useNavigate();
 
   // const imgEntry = project
   //   ? Object.entries(project).find(([key, value]) => key === 'image_url')

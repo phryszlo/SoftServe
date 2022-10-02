@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const cors = require('cors');
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json();
 
 
 const clientRoutes = require('./routes/clients');
@@ -18,6 +20,8 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 // app.engine('jsx', require('express-react-views').createEngine());
 app.use(express.urlencoded({ extended: false }));
+app.use(jsonParser); //?
+
 app.use(methodOverride("_method"));
 
 // mein routen
