@@ -42,12 +42,14 @@ const Project = ({ document, title }) => {
               : await fetchProject()
             // console.log(`projectFromServer = ${Object.values(projectFromServer).allProjects}`)
             // console.log(`projectFromServer = ${Object.values(Object.values(projectFromServer.project))}`)
+            console.log(`proj.from.srv. = ${JSON.stringify(projectFromServer)}`)
             setProject(projectFromServer.project);
             // console.log(`projectClientFromserver = ${Object.values(Object.values(projectFromServer.project_client))}}`)
-            setProjectClient(projectFromServer.project_client);
-            setImgUrl(projectFromServer.project_client
+            console.log(`pr.fr.sv.client = ${JSON.stringify(projectFromServer.client)}`)
+            setProjectClient(projectFromServer.client);
+            setImgUrl(projectFromServer.client
               // ? Object.entries(projectFromServer.project_client).find(([key, value]) => key === 'image_url')
-              ? projectFromServer.project_client.image_url
+              ? projectFromServer.client.image_url
               : null)
           }
           catch (err) {
@@ -82,19 +84,21 @@ const Project = ({ document, title }) => {
   return (
     <div className=" page-wrapper project-page-wrapper">
       <h1 className="component-title">{title}</h1>
-      <AutoForm 
-      document={project} 
-      title={`${nameTitle}`} 
-      keys={
-        [
-          { id: current_id ? current_id : '' },
-          { title: '' },
-          { order_date: '' },
-          { promise_date: '' },
-          { client: '' },
-          { invoice: '' }
-        ]
-      }
+      <AutoForm
+        document={project}
+        title={`${nameTitle}`}
+        route='projects'
+        id={current_id}
+        keys={
+          [
+            { id: current_id ? current_id : '' },
+            { title: '' },
+            { order_date: '' },
+            { promise_date: '' },
+            { client: '' },
+            { invoice: '' }
+          ]
+        }
       />
       <div className="project-client-wrapper">
         {/* <img

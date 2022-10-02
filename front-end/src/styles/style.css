@@ -15,6 +15,8 @@
   --colorNone: #0000;
   --colorBlack: #000;
   --colorBlackish: #333;
+  --colorWhite: #fff;
+  --colorWhitish: #cdc;
 }
 
 body {
@@ -68,7 +70,7 @@ body {
                       `PAGE` COMPONENTS
 /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
 h1.page-title {
-  font-size: 30px;
+  font-size: 34px;
   color: var(--colorRed);
   font-family: 'Blaka Ink', cursive;
   filter: saturate(900%) hue-rotate(220deg);
@@ -81,7 +83,7 @@ h1.page-title {
 
 
 .page-component {
-  border: .3px solid var(--color0);
+  /* border: .3px solid var(--color0); */
   display: flex;
   flex-direction: column;
   min-height: 101vh;
@@ -100,11 +102,43 @@ h1.page-title {
 }
 
 
+.button-rack{
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: auto;
+  /* border: .3px solid salmon; */
+}
+
+.seed-btn-row {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-seed{
+  width: fit-content;
+}
 .btn-seed:hover {
   background-color: aliceblue;
 }
 .btn-seed:active {
   background-color: aquamarine;
+}
+.del-rnd-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.btn-delete-random {
+  width: 60%;
+}
+.btn-delete-random:hover {
+  background-color: aliceblue;
+}
+.btn-delete-random:active {
+  background-color: aquamarine;
+}
+.q-del {
+  width: 12%;
 }
 
 
@@ -129,7 +163,7 @@ h2.component-title {
   .2px .2px .2px var(--colorOrange),
   .2px -.2px 0 var(--colorOrange),
   -.2px -.2px 0 var(--colorOrange);
-  filter: brightness(190%);
+  filter: brightness(190%) hue-rotate(222deg);
   /* border: 2px solid; */
   margin: .5em 0 .5em 0;
 }
@@ -137,6 +171,7 @@ h2.component-title {
 h1.component-title {
   font-family: 'Blaka Ink', cursive;
   color: var(--colorRed);
+  font-size: 38px;
   font-family: 'Blaka Ink', cursive;
   filter: saturate(900%) hue-rotate(220deg);
   -webkit-text-stroke: 1px var(--color0);
@@ -189,11 +224,29 @@ h1.component-title {
   text-decoration: none;
 }
 
+.btn-delete {
+  background-color: var(--colorBlack);
+  color: var(--colorOrange);
+  filter: hue-rotate(222deg) saturate(500%);
+  border: .2px solid var(--colorGreen0);
+  border-radius: 10%;
+  height: 1.6em;
+  font-size: 14px;
+  padding: .1em;
+}
+.btn-delete:hover {
+  filter: none;
+  background-color: #f336;
+}
+.btn-delete:active {
+  background-color: aquamarine;
+}
+
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 /* AUTOFORM COMPONENT */
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 .auto-form-wrapper {
-  border: .2px inset white;
+  /* border: .2px inset white; */
   display: flex;
   justify-content: center;
   padding: .2em;
@@ -214,7 +267,7 @@ h1.component-title {
 }
 
 .auto-form-inner-wrapper {
-  border: .2px inset white;
+  /* border: .2px inset white; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -224,7 +277,7 @@ h1.component-title {
 }
 
 .auto-form-inner-inputs-wrapper {
-  border: .2px inset mediumslateblue;
+  /* border: .2px inset mediumslateblue; */
   display: flex;
   flex-direction: column;
   justify-content: center;

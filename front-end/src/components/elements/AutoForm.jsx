@@ -27,12 +27,12 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   let fields = keys ? keys : {}
 
   React.useEffect(() => {
-    console.log('autoform usin effect')
+    console.log('autoform in effect')
     try {
       fields.forEach((field, index) => {
         if (excludeFields.indexOf(field) < 0) {
           setFormVals((oldVals) => (
-            { ...oldVals, [field]: `what-the-${index}` }
+            { ...oldVals, [field]: `unbeknownst-${index}` }
           ));
         }
       });
@@ -46,7 +46,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   // this seems a much hacky manner of forcing this update to work.
   React.useEffect(() => {
     if (!updateNeeded) return;
-    console.log('updateNeeded usin effect')
+    console.log('updateNeeded in effect')
     try {
       fields.forEach((field, index) => {
         if (excludeFields.indexOf(field) < 0) {
@@ -62,9 +62,8 @@ const AutoForm = ({ title, document, keys, route, id }) => {
         console.log(`UPDATE NEEDED formvals => ${key}:${value} [${index}]`)
       })
 
+      // return;
       // THE PUT
-      // 'Content-Type': 'application/x-www-form-urlencoded'
-      // was the big ticket item here.
       const putEdit =
         async () => {
           console.log(
@@ -79,24 +78,25 @@ const AutoForm = ({ title, document, keys, route, id }) => {
               console.log(`nothing`);
               if (index > 0) {
                 body[key] = value
-
               }
             });
             console.log(`body: ${JSON.stringify(body)}`)
 
             const fetchOpts = {
-              method: 'PUT',
+              method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(body)
             }
+            console.log(`fetch route: /api/${route}/${id}`);
+            // return;
             fetch(`/api/${route}/${id}`, fetchOpts)
               .then((res) => res.json())
               .then((data) => {
-                console.log(`data from put projects/${id}: ${data}`);
+                console.log(`data from put projects/${id}: ${JSON.stringify(data)}`);
               })
-              navigate(0);
+            navigate(0);
           }
           catch (err) {
             console.log(`putEdit err: that was some sort of disaster. ${err}`);
@@ -311,7 +311,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
 
         else {
           // LONG STRING
-          if (strLen > 40) {
+          if (strLen > 30) {
             return (
               <>
                 <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
@@ -494,9 +494,10 @@ const AutoForm = ({ title, document, keys, route, id }) => {
 AutoForm.defaultProps = {
   title: `client form`,
   document: {
-    name: 'Madalyn Bode',
-    email: 'Madalyn.Bode@gmail.com',
+    name: 'Default P. Client',
+    email: 'deefie@gmail.com',
     phone: '(790) 291-1596',
+    image_url: 'http://thispersondoesnotexist.com/image',
     foo: false
   }
 }

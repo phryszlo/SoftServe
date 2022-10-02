@@ -47,7 +47,11 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
         {linkFields && linkFields.length > 0 && linkFields.indexOf(field) >= 0
           ?
 
-          <a className="td-link" href={field === 'client' ? `/${field}/${current_sub_id}` : `/${model}/${current_id}`}>
+          <a
+            className="td-link"
+            href={field === 'client'
+              ? `/${field}/${current_sub_id}`
+              : `/${model}/${current_id}`}>
 
             {/* DATE FIELD TERNARY */}
             {/* // is this a date field? if so, format it. */}
@@ -102,7 +106,9 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
   const handleDeleteClick = (e) => {
     e.preventDefault();
     const rte = e.target.parentNode.parentNode.parentNode.parentNode.dataset.route;
+    console.log(`deleting ${e.target.parentNode.dataset.id}`)
     // return;
+    const this_id = e.target.parentNode.dataset.id;
     const fetchOpts = {
       method: 'DELETE',
       headers: {
@@ -111,10 +117,10 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
       }
     }
     try {
-      fetch(`/api/${rte}/${current_id}`, fetchOpts)
+      fetch(`/api/${rte}/${this_id}`, fetchOpts)
         .then((res) => res.json())
         .then((data) => {
-          console.log(`data from delete client ${current_id}: ${data}`);
+          console.log(`data from delete client ${this_id}: ${data}`);
           // setUpdatingClients(true);
         })
       navigate(0);
@@ -128,7 +134,7 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
     <div className="component autotable-component">
-      <h2 className="component-title">{model}</h2>
+      <h2 className="component-title">{route}</h2>
 
       {documents && documents.length > 0
         ?
@@ -152,7 +158,10 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
 
             {documents && documents.map((doc, rowIndex) => {
               return (
-                <tr key={`tr-${rowIndex}`} className="auto-table-row" data-id={current_id}>
+                <tr
+                  key={`tr-${rowIndex}`}
+                  className="auto-table-row"
+                >
 
                   {fields.map((field, colIndex) => {
                     return (
@@ -161,12 +170,12 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
                         : ''
                     )
                   })}
-                  <td className="td-delete-btn">
+                  <td className="td-delete-btn" data-id={current_id}>
                     <button
                       className="btn-delete btn-delete-one-client"
                       onClick={handleDeleteClick}
                     >
-                      del
+                      🤢
                     </button>
                   </td>
                 </tr>

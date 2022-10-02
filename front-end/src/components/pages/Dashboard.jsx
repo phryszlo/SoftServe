@@ -193,27 +193,36 @@ function Dashboard(props) {
       <h1 className="page-title">{props.title}</h1>
       {/* <p>{!data ? "Loading..." : data}</p> */}
       <div className="button-rack">
-        <button className="btn-seed btn-seed-clients" onClick={onSeedClientsClick}>seed clients</button>
-        <button className="btn-seed btn-seed-projects" onClick={onSeedProjectsClick}>seed projects</button>
+        <div className="seed-btn-row">
+          <button
+            className="btn-seed btn-seed-clients"
+            onClick={onSeedClientsClick}>
+            seed 5 clients
+          </button>
+          <button
+            className="btn-seed btn-seed-projects"
+            onClick={onSeedProjectsClick}>
+            seed 5 projects
+          </button>
+        </div>
         <div className="del-rnd-wrapper">
-          <button className="btn-seed btn-delete-random-projects" onClick={onDeleteRandomProjectsClick}>delete random projects:</button>
+          <button className="btn-delete-random btn-delete-random-projects" onClick={onDeleteRandomProjectsClick}>delete random projects:</button>
           <input
             onChange={onQDelInputChange_proj}
             type="number" name="qDelProjects" id="qDelProjects"
             className="q-del" ref={qProjDelRef} value={qDelProj}
-            style={{ width: "50px" }}
           />
         </div>
         <div className="del-rnd-wrapper">
-          <button className="btn-seed btn-delete-random-clients" onClick={onDeleteRandomClientsClick}>delete random clients:</button>
+          <button className="btn-delete-random btn-delete-random-clients" onClick={onDeleteRandomClientsClick}>delete random clients:</button>
           <input
             onChange={onQDelInputChange_client}
             type="number" name="qDelClients" id="qDelClients"
             className="q-del" ref={qClientDelRef} value={qDelClient}
-            style={{ width: "50px" }}
           />
         </div>
       </div>
+
       {
         projects ?
           <AutoTable model="project" route="projects" linkFields={projectLinkFields} documents={projects}></AutoTable>

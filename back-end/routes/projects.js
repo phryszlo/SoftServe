@@ -164,67 +164,26 @@ router.get('/', async (req, res) => {
 // GET ONE
 router.get('/:id', (req, res) => {
   console.log(`projects/${req.params.id} reached`);
-  try {
-    // const foundProject = await Projects.findOne({}, " -__v -createdAt -updatedAt")
-    // const foundProject = await 
-    // Projects.findOne({_id: "6335b4a38afbbf4ba6608f81"}, " -__v -createdAt -updatedAt")//.findById("6335b4a38afbbf4ba6608f81")
-    //   .populate({ path: 'client', options: { select: { 'name': 1 } } })
     Projects.findById(req.params.id)
       .populate('client') //{ path: 'client', options: { select: { 'name': 1 } } })
-      .then((err, foundProject) => {
-        err && res.json({"project": err});
-        const projectClient = foundProject ? foundProject.client : '';
-        console.log(`projectClient is ${projectClient}`);
-        console.log(`foundProject is ${foundProject}`);
-        res.json({ "project": foundProject, "project_client": projectClient });
+      .then((foundProject) => {
+        console.log(`foundProject: ${foundProject}`)
+        let foundClient = foundProject.client ? foundProject.client : {};
+        res.json({ "project": foundProject, "client": foundClient });
       })
-
-  }
-  catch (err) {
-    res.status(400).json({ success: false, message: `we don't know` });
-
-  }
+      .catch((err) => {
+        res.json({ error: err });
+      });
 });
 
-// .then((err, foundProject) => {
-//   err && res.status(400).json({ success: false, message: err });
-//   console.log(`foundProject is ${foundProject}`);
-//   res.json(foundProject);
-// })
-// .catch((err) => {
-//   res.status(400).json({ success: false, message: err });
-// });
-// await Projects.findById(req.params.id)
-//   .then((project) => {
-//     res.json({ 'project': project });
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//     res.status(400).json({ success: false, message: err.message });
-//   })
 
-// router.get('/', async (req, res) => {
-//   try {
-//     console.log('projects root route')
-//     const allProjects = await Projects.find({}, "-__v -createdAt -updatedAt")
-//       // the {path:, select:} props refer to a virtual in the schema
-//       .populate({ path: 'client_name', select: 'name' });
-
-//     console.log(`${allProjects.length} products returned`);
-//     res.json({ links: ['title', 'client'], allProjects });
-//   }
-//   catch (err) {
-//     // res.status(400).json(obj)
-//     res.status(400).json({ success: false, message: err });
-//   }
-// })
-
-router.put('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
+  console.log(`put route, projects`);
   Object.entries(req.body).forEach(([key, val], index) => {
     console.log(`entry: ${key}: ${val}`);
   })
-  console.log(`PUT: ${req.params.id} body: ${req.body}`);
-  return;
+  console.log(`PATCH!: ${req.params.id} body: ${req.body}`);
+  // return;
   await Projects.findByIdAndUpdate(req.params.id, req.body)
     .then((updatedProject) => {
       res.json({ 'project': updatedProject });
@@ -260,7 +219,8 @@ router.delete('/random/:q', async (req, res) => {
     console.log(`delete random failed: ${err}`);
 
   }
-7})
+  7
+})
 
 router.delete('/:id', (req, res) => {
   console.log(`project delete ${req.params.id} route.`);

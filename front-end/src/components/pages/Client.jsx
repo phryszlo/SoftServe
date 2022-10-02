@@ -48,7 +48,7 @@ const Client = ({ document }) => {
               ? document
               : await fetchClient()
             // console.log(`clientFromServer = ${Object.values(clientFromServer)}`)
-            setClient(clientFromServer)
+            setClient(clientFromServer.client)
 
           }
           catch (err) {
@@ -82,7 +82,7 @@ const Client = ({ document }) => {
     <div className=" page-wrapper client-page-wrapper">
       <img
         className="client-img"
-        src={image_url ? image_url : ''}
+        src={image_url ? image_url : 'http://thispersondoesnotexist.com/image'}
         width="150px"
         alt={`client image not found`} />
       <AutoForm

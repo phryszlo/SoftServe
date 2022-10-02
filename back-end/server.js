@@ -8,6 +8,9 @@ const jsonParser = bodyParser.json();
 
 const clientRoutes = require('./routes/clients');
 const projectRoutes = require('./routes/projects');
+const invoiceRoutes = require('./routes/invoices');
+const invoiceItemsRoutes = require('./routes/invoice_items');
+const taskRoutes = require('./routes/tasks');
 
 const app = new express();
 const PORT = process.env.PORT || 4000;
@@ -27,6 +30,9 @@ app.use(methodOverride("_method"));
 // mein routen
 app.use('/api/clients/', clientRoutes);
 app.use('/api/projects/', projectRoutes);
+app.use('/api/invoices/', invoiceRoutes);
+app.use('/api/invoice_items/', invoiceItemRoutes);
+app.use('/api/tasks/', taskRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

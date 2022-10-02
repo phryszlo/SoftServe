@@ -59,7 +59,7 @@ router.get('/:id', (req, res) => {
   Clients.findById(req.params.id)
     .then((foundClient) => {
       console.log(foundClient)
-      res.json(foundClient);
+      res.json({ "client": foundClient });
     })
     .catch((err) => {
       res.json(err);

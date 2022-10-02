@@ -8,7 +8,7 @@
 ## A Software Services Provider
 
 > The gist is that this is a company which develops software for clientéle.  
-> This is a rudimentary demo of modeling the clients, projects, tasks, and billing.   
+> This is a rudimentary demo of modeling the clients, projects, tasks, and billing. (billing has 2 models, for those, say, grading)   
 > It is not so much an attempt at a prototype for a product as it is an early study in the workings of document database models and relationships, the workings of Mongoose, and the construction of reusable dynamic components for data display.
 
 ### entity-relationship diagram (ERD)
@@ -51,3 +51,8 @@ The following method renders an appropriate input type based on the typeof the c
     }
     ... etc.
 ```
+
+## known bugs
+> prediction from the past: it is not likely that i kept up with updating this list
+- seeded project with date/time in form 2023-01-09T03:28:02.054Z do not get detected as dates in the autoform.
+- 

@@ -49,6 +49,7 @@ router.get('/seed/:q', (req, res) => {
     let budget_number = generateSlug(4, { format: "title" });
     let orderDate = faker.date.between("2022-01-01", Date.now())
     let promiseDate = faker.date.future();
+    p.budget_number = budget_number;
     p.order_date = orderDate;
     p.promise_date = promiseDate;
     p.project = projectIds[rndIdx];

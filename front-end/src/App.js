@@ -52,7 +52,6 @@ function App() {
             </ul>
           </nav>
           <Routes>
-            {/* <Route path="/about" /> */}
             <Route path="/projects" element={<Projects />} />
             <Route path="/project/:id" element={<Project />} />
             <Route path="/project" element={<Project />} />
