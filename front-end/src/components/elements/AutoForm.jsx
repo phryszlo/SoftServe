@@ -8,18 +8,26 @@ const AutoForm = ({ title, document, route, id }) => {
   const [newOrderDate, setNewOrderDate] = React.useState(null);
   const [newPromiseDate, setNewPromiseDate] = React.useState(null);
   const [formVals, setFormVals] = React.useState({});
+  const [fields, setFields] = React.useState([]);
   const formRef = React.useRef(null);
 
 
-  // React.useEffect(() => {
-  //   console.log('usin effect')
-  //   console.log(
-  //     `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
-  // })
+  React.useEffect(() => {
+    console.log('usin effect')
+    console.log(
+      `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
+      setFields(document ? Object.keys(document)
+      : [])
+      fields.forEach((field) => {
+        setFormVals((oldVals) => ({
+          ...oldVals, [field]: 'nothing'
+        }));
+      })
+  }, [])
 
-  const fields =
-    document ? Object.keys(document)
-      : []
+  // const fields =
+  //   document ? Object.keys(document)
+  //     : []
 
   const excludeFields = [
     '_id', 'id', '__v'
@@ -39,6 +47,43 @@ const AutoForm = ({ title, document, route, id }) => {
       setFormVals(currentVals => ({ ...currentVals, [key]: value }));
     }
   };
+
+  
+  //   🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
+  const handleUpdateClick = async (e) => {
+    e.preventDefault();
+
+
+    // console.log(`update clicked ${e.currentTarget}`);
+    // console.log(`form.current =  ${formRef.current}`)
+    // formRef.current.body.forEach((whatever) => {
+    //   console.log(`form thing ${whatever}`);
+    // })
+
+    const putEdit =
+        async () => {
+          try {
+            // const returnFromServer = id === 'client'
+            //   ? document
+            //   : await updateModel(route, id);
+
+            // console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
+            // setClient(clientFromServer)
+
+            formVals && Object.entries(formVals).forEach(([el, thing], index) => {
+              console.log(`el: ${el} ${thing}`)
+            })
+            formVals && console.log(Object.entries(formVals).find(([el, thing], index) => el === 'name'));
+
+          }
+          catch (err) {
+            console.log(`putEdit err: that was some sort of disaster. ${err}`);
+          }
+        }
+
+    putEdit();
+
+  }
 
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔺🔺🔺🔺
   const renderFormInput = (docKey, docVal) => {
@@ -200,43 +245,6 @@ const AutoForm = ({ title, document, route, id }) => {
 
 
 
-  //   🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
-  const handleUpdateClick = async (e) => {
-    e.preventDefault();
-
-    const form = e.currentTarget;
-    const formElements = form.elements;
-    formElements.forEach((el) => {
-      console.log(`el = ${el}`);
-    })
-    console.log(`update clicked ${e.currentTarget}`);
-    console.log(`form.current =  ${formRef.current}`)
-    // formRef.current.body.forEach((whatever) => {
-    //   console.log(`form thing ${whatever}`);
-    // })
-
-    const putEdit =
-      id && id !== '' ?
-        async () => {
-          try {
-            // this ternary allows an empty /:id path to use the default props document
-            const returnFromServer = id === 'client'
-              ? document
-              : await updateModel(route, id);
-
-            console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
-            // setClient(clientFromServer)
-
-          }
-          catch (err) {
-            console.log(`putEdit err: that was some sort of disaster.`);
-          }
-        }
-        : ''
-
-    putEdit();
-
-  }
 
   const updateModel = async (route, id) => {
     try {
