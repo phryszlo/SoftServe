@@ -95,7 +95,8 @@ function Dashboard(props) {
   }
 
 
-
+// 🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆
+// #region seeders
 
   const onSeedClientsClick = (e) => {
     // setSeedClicks(seedClicks + 1);
@@ -121,6 +122,35 @@ function Dashboard(props) {
         // data && setProjects(data.message)
       });
   }
+  const onSeedInvoicesClick = (e) => {
+    // setSeedClicks(seedClicks + 1);
+    fetch(`/api/invoices/seed/${seedQ}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        // navigate(0);
+
+        // data && setProjects(data.message)
+      });
+  }
+
+  const onSeedTasksClick = (e) => {
+    // setSeedClicks(seedClicks + 1);
+    fetch(`/api/tasks/seed/${seedQ}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        // navigate(0);
+
+        // data && setProjects(data.message)
+      });
+  }
+
+  // #endregion
+  
+  
+  // 🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫
+  // #region deleters
   const onDeleteRandomProjectsClick = (e) => {
     console.log(`qDelRef.current.value: ${qProjDelRef.current.value}`)
     // return;
@@ -186,6 +216,8 @@ function Dashboard(props) {
     setQDelClient(e.target.value);
   }
 
+  // #endregion
+
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
    🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
@@ -202,6 +234,18 @@ function Dashboard(props) {
           <button
             className="btn-seed btn-seed-projects"
             onClick={onSeedProjectsClick}>
+            seed 5 projects
+          </button>
+        </div>
+        <div className="seed-btn-row">
+          <button
+            className="btn-seed btn-seed-invoices"
+            onClick={onSeedInvoicesClick}>
+            seed 5 clients
+          </button>
+          <button
+            className="btn-seed btn-seed-tasks"
+            onClick={onSeedTasksClick}>
             seed 5 projects
           </button>
         </div>
