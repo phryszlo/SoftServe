@@ -2,27 +2,39 @@ import React from 'react'
 // import { DateRangePicker, DateRange } from "@mui/x-date-pickers"
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const AutoForm = ({ title, document, route, id }) => {
+
+const AutoForm = ({ title, document, keys, route, id }) => {
 
   const [newOrderDate, setNewOrderDate] = React.useState(null);
   const [newPromiseDate, setNewPromiseDate] = React.useState(null);
   const [formVals, setFormVals] = React.useState({});
-  const [fields, setFields] = React.useState([]);
+  // const [fields, setFields] = React.useState([]);
   const formRef = React.useRef(null);
 
 
+
+  // next line learnt from:
+  // https://stackoverflow.com/questions/19874555/how-do-i-convert-array-of-objects-into-one-object-in-javascript
+  // let fields = keys ? keys.reduce((obj, item) => (obj[item.key] = item.value, obj), {}) : {}
+  let fields = keys ? keys : {}
+
   React.useEffect(() => {
-    console.log('usin effect')
-    console.log(
-      `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
-      setFields(document ? Object.keys(document)
-      : [])
+    console.log('autoform usin effect')
+    try {
+      // setFields(document ? Object.keys(document)
+      //   : [])
       fields.forEach((field) => {
         setFormVals((oldVals) => ({
           ...oldVals, [field]: 'nothing'
         }));
-      })
+      });
+    }
+    catch (err) {
+      console.log(`useEffect erred: ${err}`);
+    }
+
   }, [])
 
   // const fields =
@@ -42,46 +54,115 @@ const AutoForm = ({ title, document, route, id }) => {
 
   // form submission method learned from, e.g.,
   // https://codesandbox.io/s/form-state-es25p?file=/src/App.js
-  const onChange = (key) => {
+  const setFormVal = (key) => {
+    console.log(`setFormVal hit, key = ${key}`);
     return ({ target: { value } }) => {
+      console.log(`inside setFormVal value?? = ${value}`)
       setFormVals(currentVals => ({ ...currentVals, [key]: value }));
     }
   };
 
-  
+
   //   🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
   const handleUpdateClick = async (e) => {
     e.preventDefault();
+    // Navigate(0);
 
+    console.log(`update clicked ${e.currentTarget}`);
 
-    // console.log(`update clicked ${e.currentTarget}`);
-    // console.log(`form.current =  ${formRef.current}`)
-    // formRef.current.body.forEach((whatever) => {
-    //   console.log(`form thing ${whatever}`);
-    // })
+    // the awfulest possibly way. but i am stuck.
+    // Object.entries(fields).forEach(([key, value], index) => {
+    fields.forEach((obj) => {
+      console.log(`field!!! ${Object.keys(obj)}`);
+      switch (`${Object.keys(obj)}`) {
+        case 'name':
+          console.log(`>>> it's name e.target.name.value = ${e.target.name.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.name.value }));
+            break;
+            
+        case 'email':
+          console.log(`>>> it's name e.target.email.value = ${e.target.email.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.email.value }));
+            break;
 
-    const putEdit =
-        async () => {
-          try {
-            // const returnFromServer = id === 'client'
-            //   ? document
-            //   : await updateModel(route, id);
+        case 'phone':
+          console.log(`>>> it's name e.target.phone.value = ${e.target.phone.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.phone.value }));
+            break;
 
-            // console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
-            // setClient(clientFromServer)
+        case 'image_url':
+          console.log(`>>> it's name e.target.image_url.value = ${e.target.image_url.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.image_url.value }));
+            break;
 
-            formVals && Object.entries(formVals).forEach(([el, thing], index) => {
-              console.log(`el: ${el} ${thing}`)
-            })
-            formVals && console.log(Object.entries(formVals).find(([el, thing], index) => el === 'name'));
+        case 'title':
+          console.log(`>>> it's name e.target.title.value = ${e.target.title.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.title.value }));
+            break;
 
-          }
-          catch (err) {
-            console.log(`putEdit err: that was some sort of disaster. ${err}`);
-          }
-        }
+        case 'completed':
+          console.log(`completed allegedly found in fields`);
+          console.log(`>>> it's name e.target.completed.value = ${e.target.completed ? e.target.completed.value : ''}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.completed.value }));
+            break;
 
-    putEdit();
+        case 'budget_number':
+          console.log(`>>> it's name e.target.budget_number.value = ${e.target.budget_number.value}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.budget_number.value }));
+            break;
+
+        case 'description':
+          console.log(`>>> it's name e.target.description.value = ${e.target.name.description}`);
+          setFormVals(currentVals =>
+            ({ ...currentVals, [obj.key]: e.target.description.value }));
+            break;
+
+      }
+    })
+
+    Object.entries(formVals).forEach(([key, value]) => {
+      console.log(`formVals A-GAIN ${key} ${value}`)
+    })
+
+    // // console.log(`form.current =  ${formRef.current}`)
+    // // formRef.current.body.forEach((whatever) => {
+    // //   console.log(`form thing ${whatever}`);
+    // // })
+
+    // const putEdit =
+
+    //   async () => {
+    //     console.log(`putEdit ${e.currentTarget} formVals: ${JSON.stringify(formVals)}`);
+
+    //     try {
+    //       // const returnFromServer = id === 'client'
+    //       //   ? document
+    //       //   : await updateModel(route, id);
+
+    //       // console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
+    //       // setClient(clientFromServer)
+
+    //       formVals && Object.entries(formVals).forEach(([el, thing], index) => {
+    //         console.log(`el: ${el} ${thing}`)
+    //       })
+    //       formVals &&
+    //         console.log(`anything: ${Object.entries(formVals)
+    //           .find(([el, thing], index) => el === 'name')}`);
+
+    //     }
+    //     catch (err) {
+    //       console.log(`putEdit err: that was some sort of disaster. ${err}`);
+    //     }
+    //   }
+
+    // putEdit();
 
   }
 
@@ -131,6 +212,7 @@ const AutoForm = ({ title, document, route, id }) => {
                 renderInput={(params) => (
                   <React.Fragment>
                     <TextField
+                      onChange={setFormVal(docKey)}
                       className="form-input"
                       {...params}
                       size="small"
@@ -157,12 +239,20 @@ const AutoForm = ({ title, document, route, id }) => {
               <>
                 <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
                 <textarea
+                  onChange={setFormVal(docKey)}
                   className="form-input form-textarea-input"
                   name={docKey}
                   id={`form-input-${docKey}`}
                   cols="30"
                   rows={Math.ceil(strLen / 30)}
-                  defaultValue={docVal}>
+                  // value={formVals[docKey]
+                  // Object.entries(formVals).find(([key, value], index) =>
+                  //   key === docKey
+                  // ) ?
+                  //    {docKey} : 'oh no'
+                  // }
+                  defaultValue={docVal}
+                >
                 </textarea>
               </>
             )
@@ -279,7 +369,13 @@ const AutoForm = ({ title, document, route, id }) => {
 
       {document ?
         <div className="auto-form-wrapper">
-          <form action="" onSubmit={handleUpdateClick} className="auto-form" ref={formRef}>
+          <form
+            action={`/api/${route}/${id}?_method=PUT`}
+            onSubmit={handleUpdateClick}
+            className="auto-form"
+            ref={formRef}
+            method="POST"
+          >
             <div className="auto-form-inner-wrapper">
               <div className="auto-form-inner-inputs-wrapper">
 

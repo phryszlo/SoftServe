@@ -12,11 +12,9 @@ const Client = ({ document }) => {
     ? location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
     : document._id;
 
-    // ///////////
-    console.log(`doc.leng = ${JSON.stringify(document)}`)
-  Object.values(document).forEach((k) => {
-    console.log(`k = ${k}`)
-  })
+  // ///////////
+  // console.log(`doc.leng = ${JSON.stringify(document)}`)
+
 
 
   // console.log(`document._id = ${client.id ? document.id : 'no doc._id'}  `)
@@ -31,11 +29,14 @@ const Client = ({ document }) => {
     : null;
 
   const nameTitle = nameEntry ? nameEntry[1] : '';
-  console.log(`client.jsx: current_id = ${current_id}`)
-  console.log(`client.jsx: document: ${document}`);
+  // console.log(`client.jsx: current_id = ${current_id}`)
+  // console.log(`client.jsx: document: ${document}`);
 
   React.useEffect(() => {
-    console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
+    // console.log(`useEffect document(obj.values) = ${Object.values(document)}`)
+    // Object.values(document).forEach((k) => {
+    //   console.log(`k = ${k}`)
+    // })
     const getClient =
       current_id && current_id !== '' ?
         async () => {
@@ -44,7 +45,7 @@ const Client = ({ document }) => {
             const clientFromServer = current_id === 'client'
               ? document
               : await fetchClient()
-            console.log(`clientFromServer = ${Object.values(clientFromServer)}`)
+            // console.log(`clientFromServer = ${Object.values(clientFromServer)}`)
             setClient(clientFromServer)
 
           }
@@ -76,7 +77,7 @@ const Client = ({ document }) => {
       // const res2 = await fetch(`/api/clients/${current_id}`, settings);
       // console.log(`res2 = ${res2}`)
 
-      console.log(`data from api/clients/:id = ${data}`);
+      console.log(`Client.jsx : data from api/clients/:id = ${JSON.stringify(data)}`);
 
       return data;
     }
@@ -92,7 +93,20 @@ const Client = ({ document }) => {
         src={image_url ? image_url : ''}
         width="150px"
         alt={`fake image courtesy 'www.thispersondoesnotexist.com' (unless you are reading this alt tag)`} />
-      <AutoForm document={client} title={nameTitle} route='clients' id={current_id ? current_id : null} />
+      <AutoForm
+        keys={
+          [
+            { _id: current_id ? current_id : '' },
+            { name: '' },
+            { email: '' },
+            { phone: '' },
+            { image_url: '' }
+          ]
+        }
+        document={client}
+        title={nameTitle}
+        route='clients'
+        id={current_id ? current_id : null} />
     </div>
   )
 }
