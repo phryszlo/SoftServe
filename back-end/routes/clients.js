@@ -64,8 +64,14 @@ router.get('/:id', (req, res) => {
     });
 })
 
+
 router.put('/:id', async (req, res) => {
-  await Clients.findByIdAndUpdate(req.params.id, req.body)
+  console.log(`put route api/client/:id => id=${req.params.id}`);
+
+  await Clients.findByIdAndUpdate(
+    req.params.id, req.body,
+    { new: true, useFindAndModify: false }
+  )
     .then((updatedClient) => {
       res.json({ 'client': updatedClient });
     })

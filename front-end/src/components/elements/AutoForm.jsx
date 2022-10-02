@@ -3,16 +3,19 @@ import React from 'react'
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
 
-const AutoForm = ({ title, document }) => {
+const AutoForm = ({ title, document, route, id }) => {
 
   const [newOrderDate, setNewOrderDate] = React.useState(null);
   const [newPromiseDate, setNewPromiseDate] = React.useState(null);
+  const [formVals, setFormVals] = React.useState({});
+  const formRef = React.useRef(null);
 
-  React.useEffect(() => {
-    console.log('usin effect')
-    console.log(
-      `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
-  })
+
+  // React.useEffect(() => {
+  //   console.log('usin effect')
+  //   console.log(
+  //     `useEffect autoform newPromiseDate ${newPromiseDate} newClientDate ${newOrderDate}`);
+  // })
 
   const fields =
     document ? Object.keys(document)
@@ -21,11 +24,21 @@ const AutoForm = ({ title, document }) => {
   const excludeFields = [
     '_id', 'id', '__v'
   ];
+
+
+  const docId = id ? id : '';
+  console.log(`doc'mentid = ${docId}`);
   console.log('doc=', document)
   console.log('fields=', fields)
 
 
-
+  // form submission method learned from, e.g.,
+  // https://codesandbox.io/s/form-state-es25p?file=/src/App.js
+  const onChange = (key) => {
+    return ({ target: { value } }) => {
+      setFormVals(currentVals => ({ ...currentVals, [key]: value }));
+    }
+  };
 
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔺🔺🔺🔺
   const renderFormInput = (docKey, docVal) => {
@@ -91,7 +104,7 @@ const AutoForm = ({ title, document }) => {
             </React.Fragment>
           )
         }
-        
+
         else {
           // LONG STRING
           if (strLen > 40) {
@@ -186,7 +199,69 @@ const AutoForm = ({ title, document }) => {
   // 🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺🔺
 
 
-  // 🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺
+
+  //   🤺 🤺 🤺 🤺 🤺 🤺 🤺 🤺
+  const handleUpdateClick = async (e) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const formElements = form.elements;
+    formElements.forEach((el) => {
+      console.log(`el = ${el}`);
+    })
+    console.log(`update clicked ${e.currentTarget}`);
+    console.log(`form.current =  ${formRef.current}`)
+    // formRef.current.body.forEach((whatever) => {
+    //   console.log(`form thing ${whatever}`);
+    // })
+
+    const putEdit =
+      id && id !== '' ?
+        async () => {
+          try {
+            // this ternary allows an empty /:id path to use the default props document
+            const returnFromServer = id === 'client'
+              ? document
+              : await updateModel(route, id);
+
+            console.log(`clientFromServer = ${Object.values(returnFromServer)}`)
+            // setClient(clientFromServer)
+
+          }
+          catch (err) {
+            console.log(`putEdit err: that was some sort of disaster.`);
+          }
+        }
+        : ''
+
+    putEdit();
+
+  }
+
+  const updateModel = async (route, id) => {
+    try {
+      const settings = {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: formRef.current.body
+      };
+      const res = await fetch(`/api/${route}/${id}`, settings);
+      // console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
+      const data = await res.json()
+
+      console.log(`data from /api/${route}/${id} = ${JSON.stringify(data)}`);
+
+      return data;
+    }
+    catch (err) {
+      console.log(`updateModel err: ${JSON.stringify(err)}`);
+    }
+  }
+
+  // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
   // RETURN()
   // 🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹
 
@@ -195,20 +270,37 @@ const AutoForm = ({ title, document }) => {
       <h2 className="component-title">{title}</h2>
 
       {document ?
+        <div className="auto-form-wrapper">
+          <form action="" onSubmit={handleUpdateClick} className="auto-form" ref={formRef}>
+            <div className="auto-form-inner-wrapper">
+              <div className="auto-form-inner-inputs-wrapper">
 
-        <form action="" className="auto-form">
-          {Object.entries(document).map(([docKey, docVal], index) => {
-            return (
-              excludeFields.indexOf(docKey) < 0 ?
-                <div className="form-field" key={`field-${index}`}>
-                  {
-                    renderFormInput(docKey, docVal)
-                  }
-                </div>
-                : ''
-            )
-          })}
-        </form>
+                {Object.entries(document).map(([docKey, docVal], index) => {
+                  return (
+                    excludeFields.indexOf(docKey) < 0 ?
+                      <div className="form-field" key={`field-${index}`}>
+                        {
+                          renderFormInput(docKey, docVal)
+                        }
+                      </div>
+                      : ''
+                  )
+                })}
+              </div>
+              {/* <button
+                className="update-button client-update-button"
+                onClick={handleUpdateClick}
+              >
+                update
+              </button> */}
+              <input
+                onSubmit={handleUpdateClick}
+                className="update-button client-update-button"
+                type="submit"
+                value="update" />
+            </div>
+          </form>
+        </div>
 
         : <h4>no data was sent</h4>}
     </div>

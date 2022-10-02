@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const cors = require('cors');
+
 
 const clientRoutes = require('./routes/clients');
 const projectRoutes = require('./routes/projects');
@@ -9,6 +11,7 @@ const app = new express();
 const PORT = process.env.PORT || 4000;
 require('dotenv').config();
 
+app.use(cors());
 app.use(express.static('public'));
 // app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.set('views', __dirname + '/views');

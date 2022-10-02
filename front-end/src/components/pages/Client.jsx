@@ -8,8 +8,18 @@ const Client = ({ document }) => {
 
   const location = useLocation();
 
-  const current_id = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  const current_id = !document._id
+    ? location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
+    : document._id;
 
+    // ///////////
+    console.log(`doc.leng = ${JSON.stringify(document)}`)
+  Object.values(document).forEach((k) => {
+    console.log(`k = ${k}`)
+  })
+
+
+  // console.log(`document._id = ${client.id ? document.id : 'no doc._id'}  `)
 
   const imgEntry = client
     ? Object.entries(client).find(([key, value]) => key === 'image_url')
@@ -31,19 +41,20 @@ const Client = ({ document }) => {
         async () => {
           try {
             // this ternary allows an empty /:id path to use the default props document
-            const clientFromServer = current_id === 'client' 
+            const clientFromServer = current_id === 'client'
               ? document
               : await fetchClient()
             console.log(`clientFromServer = ${Object.values(clientFromServer)}`)
             setClient(clientFromServer)
+
           }
           catch (err) {
-            console.log(`getClient err: ${err}`);
+            console.log(`getClient err: that was some sort of disaster.`);
           }
         }
         : ''
 
-        getClient();
+    getClient();
 
   }, []);
 
@@ -52,6 +63,18 @@ const Client = ({ document }) => {
       const res = await fetch(`/api/clients/${current_id}`);
       // console.log(`res: ${Object.entries((key, entry) => key === 'allClients')}`);
       const data = await res.json()
+
+      // this is only a test. why is my proxy proxying in this component and proxying not in autoform?
+      // const settings = {
+      //   method: 'PUT',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: {}
+      // };
+      // const res2 = await fetch(`/api/clients/${current_id}`, settings);
+      // console.log(`res2 = ${res2}`)
 
       console.log(`data from api/clients/:id = ${data}`);
 
@@ -69,7 +92,7 @@ const Client = ({ document }) => {
         src={image_url ? image_url : ''}
         width="150px"
         alt={`fake image courtesy 'www.thispersondoesnotexist.com' (unless you are reading this alt tag)`} />
-      <AutoForm document={client} title={nameTitle} />
+      <AutoForm document={client} title={nameTitle} route='clients' id={current_id ? current_id : null} />
     </div>
   )
 }
