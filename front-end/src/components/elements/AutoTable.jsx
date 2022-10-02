@@ -15,22 +15,22 @@ const AutoTable = ({ documents, model, linkFields }) => {
     'id', '__v', 'image_url'
   ];
 
-  console.log(`${model} docs = ${documents}`)
-  console.log(`${model} fields = ${fields}`)
+  // console.log(`${model} docs = ${documents}`)
+  // console.log(`${model} fields = ${fields}`)
 
 
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻
   const renderTD = (field, doc, colIndex) => {
     if (field === '_id') {
       current_id = Object.values(doc)[colIndex];
-      console.log(current_id)
+      // console.log(current_id)
       return '';
     }
 
     // this is bad. this is pre-populated for the projects sub = 'client'.
     if (field === 'client') {
-      console.log(`field eqd client: ${Object.values(doc)[colIndex].id}`);
-      current_sub_id = Object.values(doc)[colIndex].id
+      // console.log(`field eqd client: ${Object.values(doc)[colIndex].id}`);
+      current_sub_id = Object.values(doc)[colIndex] ? Object.values(doc)[colIndex].id : ''
     }
 
     return (

@@ -190,7 +190,7 @@ router.get('/:id', (req, res) => {
         const projectClient = foundProject.client;
         console.log(`projectClient is ${projectClient}`);
         console.log(`foundProject is ${foundProject}`);
-        res.json({"project": foundProject, "project_client": foundProject.client});
+        res.json({ "project": foundProject, "project_client": foundProject.client });
       })
 
   }
@@ -245,6 +245,23 @@ router.post('/', async (req, res) => {
     })
 })
 
+router.delete('/random/:q', async (req, res) => {
+  console.log(`delete random: ${req.params.q}`);
+  try {
+    const projectIds = await Projects.find({}, { select: '_id' });
+    // console.log(`projids: ${projectIds}`);
+    for (let i = 0; i < req.params.q; i++) {
+      let rnd = Math.floor(Math.random() * projectIds.length);
+      console.log(`deleting ${projectIds[rnd]}`);
+      await Projects.findByIdAndRemove(projectIds[rnd])
+    }
+  }
+  catch (err) {
+    console.log(`delete random failed: ${err}`);
+
+  }
+7})
+
 router.delete('/:id', async (req, res) => {
   await Projects.findByIdAndRemove(req.params.id)
     .then((err, removed) => {
@@ -256,6 +273,9 @@ router.delete('/:id', async (req, res) => {
   //   res.status(400).json({ success: false, message: err.message });
   // })
 })
+
+
+
 
 
 

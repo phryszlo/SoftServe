@@ -334,8 +334,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
         else {
           return (
             <>
-              <label className="form-input-label"></label>
-              {/* <p className="comment">{docKey}</p> */}
+              {/* <label className="form-input-label"></label>
               {
                 Object.entries(docVal).forEach(([key, val], index) => {
                   return (
@@ -354,7 +353,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                     </>
                   )
                 })
-              }
+              } */}
             </>
           )
         }

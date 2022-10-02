@@ -1,14 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Blaka+Ink&family=Bungee+Shade&family=Butcherman&family=Faster+One&family=Montserrat:wght@300;400&family=Noto+Sans+Mono:wght@300&display=swap');
+
 :root {
   --color0: #9ff;
   --color1: rgb(43, 228, 249);
-  --color2: rgba(255, 153, 116, 0.92);
-  --color3: rgba(46, 219, 150, 0.92);
+  --colorOrange: rgb(195, 121, 94);
+  --colorGreen0: rgba(46, 219, 150, 0.92);
   --color4: rgb(203, 222, 243);
   --colorNav: rgb(6, 90, 180);
   --colorRed: rgb(255, 63, 63);
   --colorDark: rgb(12, 24, 16);
   --colorPurple: #96f;
+  --colorGreen: #3e6;
+  --colorYellow: rgb(206, 193, 8);
+  --colorNone: #0000;
+  --colorBlack: #000;
+  --colorBlackish: #333;
 }
 
 body {
@@ -90,9 +96,16 @@ h1.page-title {
   /* border: solid orange; */
   width: fit-content;
   max-width: 80%;
-  margin: 1.2em auto;
+  margin: 0.6em auto;
 }
 
+
+.btn-seed:hover {
+  background-color: aliceblue;
+}
+.btn-seed:active {
+  background-color: aquamarine;
+}
 
 
 /* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
@@ -109,11 +122,18 @@ h1.page-title {
 /* AUTOTABLE COMPONENT */
 /*▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️▪️*/
 h2.component-title {
-  color: var(--color1);
-  font-size: 14px;
+  color: var(--colorBlackish);
+  font-size: 16px;
+  text-shadow: .9px .9px var(--colorOrange);
+  text-shadow: -.2px .2px .2px var(--colorOrange),
+  .2px .2px .2px var(--colorOrange),
+  .2px -.2px 0 var(--colorOrange),
+  -.2px -.2px 0 var(--colorOrange);
+  filter: brightness(190%);
   /* border: 2px solid; */
   margin: .5em 0 .5em 0;
 }
+
 h1.component-title {
   font-family: 'Blaka Ink', cursive;
   color: var(--colorRed);
@@ -141,8 +161,8 @@ h1.component-title {
 
 .auto-table th {
   font-size: 12px;
-  border: .3px solid var(--color2);
-  color: var(--color2);
+  border: .3px solid var(--colorOrange);
+  color: var(--colorOrange);
   padding: .2em;
 }
 
@@ -151,7 +171,7 @@ h1.component-title {
   text-align: left;
   font-size: 10px;
   color: var(--color4);
-  border: .3px solid var(--color3);
+  border: .3px solid var(--colorGreen0);
 }
 
 /* this is sub-optimal. better if you could mark your auto-fields somehow.. */
@@ -180,17 +200,19 @@ h1.component-title {
   width: fit-content;
   margin: auto;
 }
+
 .auto-form {
   position: relative;
   /* left: -.8em; */
   border: .2px inset #999;
   /* border-radius: 6%; */
   box-shadow: 1px -1px 13px 1px rgba(29, 23, 123, 0.522),
-  -1px 1px 13px 1px rgba(29, 23, 123, 0.522);
+    -1px 1px 13px 1px rgba(29, 23, 123, 0.522);
   padding: .2em;
   width: fit-content;
   margin: auto;
 }
+
 .auto-form-inner-wrapper {
   border: .2px inset white;
   display: flex;
@@ -200,6 +222,7 @@ h1.component-title {
   width: fit-content;
   margin: auto;
 }
+
 .auto-form-inner-inputs-wrapper {
   border: .2px inset mediumslateblue;
   display: flex;
@@ -209,6 +232,7 @@ h1.component-title {
   width: fit-content;
   margin: auto;
 }
+
 .update-button {
   height: 3em;
   margin: 0 1em;
@@ -217,12 +241,15 @@ h1.component-title {
   border: 3px outset var(--color0);
   border-radius: 5%;
 }
+
 .update-button:hover {
   border-color: var(--colorRed);
 }
+
 .update-button:active {
   border-color: var(--colorDark);
 }
+
 img.client-img {
   font-size: 10px;
   height: 150px;
@@ -231,6 +258,7 @@ img.client-img {
   border: .3px inset var(--color0);
   border-radius: 6%;
 }
+
 .form-field {
   display: flex;
   justify-content: center;
@@ -241,10 +269,13 @@ img.client-img {
   padding: .05em;
   /* border: .2px solid var(--color2); */
 }
-.form-input, .comment {
+
+.form-input,
+.comment {
   margin: 0;
   width: 74%;
 }
+
 /* .comment::before {
   content: '\00a0 \00a0 \00a0 \00a0 \00a0 \00a0 \00a0';
 } */
@@ -259,8 +290,8 @@ img.client-img {
   /* border: solid aquamarine; */
   margin: 0 1em 0 0;
 }
-.date-time-picker
-{
+
+.date-time-picker {
   background-color: white;
   /* min-width: 100%; */
 }
@@ -275,6 +306,7 @@ img.client-img {
   width: 100%;
   margin: 1em auto;
 }
+
 .project-client-img {
   position: relative;
   top: -1.5em;
@@ -286,7 +318,7 @@ img.client-img {
   border-radius: 6%;
 }
 
-.sub-display-details{
+.sub-display-details {
   display: flex;
   justify-content: center;
   width: fit-content;
@@ -294,17 +326,20 @@ img.client-img {
   margin: auto;
   /* border: solid #9ff; */
 }
+
 .sub-display-list {
   display: flex;
   flex-direction: column;
   /* border: solid #690; */
   padding: 0;
 }
-.sub-display-label{
+
+.sub-display-label {
   font-size: 12px;
   margin-right: .7em;
   color: whitesmoke;
 }
+
 .sub-display-item {
   margin: 0;
   width: fit-content;

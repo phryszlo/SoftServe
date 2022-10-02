@@ -92,6 +92,23 @@ router.post('/', async (req, res) => {
     })
 })
 
+router.delete('/random/:q', async (req, res) => {
+  console.log(`delete random: ${req.params.q}`);
+  try {
+    const clientIds = await Clients.find({}, { select: '_id' });
+    // console.log(`projids: ${clientIds}`);
+    for (let i = 0; i < req.params.q; i++) {
+      let rnd = Math.floor(Math.random() * clientIds.length);
+      console.log(`deleting ${clientIds[rnd]}`);
+      await Clients.findByIdAndRemove(clientIds[rnd])
+    }
+  }
+  catch (err) {
+    console.log(`delete random failed: ${err}`);
+
+  }
+7})
+
 router.delete('/:id', async (req, res) => {
   await Clients.findByIdAndRemove(req.params.id)
     .then(() => {
