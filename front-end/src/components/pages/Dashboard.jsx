@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 function Dashboard(props) {
   const [clients, setClients] = React.useState(null);
   const [projects, setProjects] = React.useState(null);
+  const [invoices, setInvoices] = React.useState(null);
+  const [tasks, setTasks] = React.useState(null);
   const [seedQ, setSeedQ] = React.useState(5);
   const [clientLinkFields, setClientLinkFields] = React.useState([]);
   const [projectLinkFields, setProjectLinkFields] = React.useState([]);
+  const [invoiceLinkFields, setInvoiceLinkFields] = React.useState([]);
+  const [taskLinkFields, setTaskLinkFields] = React.useState([]);
   const [qDelProj, setQDelProj] = React.useState(5);
   const [qDelClient, setQDelClient] = React.useState(5);
   const [updatingClients, setUpdatingClients] = React.useState(false);
@@ -42,9 +46,15 @@ function Dashboard(props) {
       // console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
       setClients(clientsFromServer)
     }
+    const getInvoices = async () => {
+      const invoicesFromServer = await fetchInvoices()
+      // console.log(`clientsFromServer = ${Object.values(clientsFromServer)}`)
+      setInvoices(invoicesFromServer)
+    }
 
     getProjects();
     getClients();
+    getInvoices();
 
   }, []);
 
@@ -96,6 +106,36 @@ function Dashboard(props) {
     // this requires that the link_fields be passed in as the first object in the res.json()
     setClientLinkFields(Object.values(data)[0]);
     return data.allClients;
+  }
+
+  const fetchTasks = async () => {
+    const res = await fetch('/api/tasks/')
+    // console.log(`res: ${Object.entries((key, entry) => key === 'allTasks')}`);
+    const data = await res.json()
+
+    console.log(data['allTasks']);
+    console.log(data['links']);
+
+    setTaskLinkFields(data['links']);
+
+    // console.log(`invoice fields = ${JSON.stringify(linkFields)}`);
+
+    return data['allInvoices'];
+  }
+
+  const fetchInvoices = async () => {
+    const res = await fetch('/api/invoices/')
+    // console.log(`res: ${Object.entries((key, entry) => key === 'allInvoices')}`);
+    const data = await res.json()
+
+    console.log(data['allInvoices']);
+    console.log(data['links']);
+
+    setInvoiceLinkFields(data['links']);
+
+    // console.log(`invoice fields = ${JSON.stringify(linkFields)}`);
+
+    return data['allInvoices'];
   }
   // #endregion
 
@@ -275,6 +315,16 @@ function Dashboard(props) {
         clients ?
           <AutoTable model="client" route="clients" linkFields={clientLinkFields} documents={clients} />
           : <div className="no-table-here">no clients received</div>
+      }
+      {
+        invoices ?
+          <AutoTable model="invoice" route="invoices" linkFields={invoiceLinkFields} documents={invoices} />
+          : <div className="no-table-here">no invoices received</div>
+      }
+      {
+        tasks ?
+          <AutoTable model="task" route="tasks" linkFields={taskLinkFields} documents={tasks} />
+          : <div className="no-table-here">no tasks received</div>
       }
 
     </div>

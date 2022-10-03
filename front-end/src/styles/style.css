@@ -265,7 +265,7 @@ h1.component-title {
 .td-list-item span {
   display: block;
   /* width: 4em; */
-  border: solid orange;;
+  /* border: solid orange; */
 }
 
 .btn-delete {
@@ -382,7 +382,7 @@ img.client-img {
   align-self: center;
   text-align: right;
   text-shadow: .1px .3px #9ff;
-  width: 8em;
+  width: 9em;
   color: var(--colorPurple);
   /* border: solid aquamarine; */
   margin: 0 1em 0 0;

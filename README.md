@@ -55,4 +55,4 @@ The following method renders an appropriate input type based on the typeof the c
 ## known bugs
 > prediction from the past: it is not likely that i kept up with updating this list
 - seeded project with date/time in form 2023-01-09T03:28:02.054Z do not get detected as dates in the autoform.
-- 
+- page updates are displayed with a straight navigate(0) reload, which is way sub-optimal, but i couldn't get that wired.

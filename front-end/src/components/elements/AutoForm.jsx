@@ -293,7 +293,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                       {...params}
                       size="small"
                       sx={{
-                        width: { sm: 270, md: 320 },
+                        width: { sm: 200, md: 320 },
                         "& .MuiInputBase-root": {
                           height: 26,
                           fontSize: 14
