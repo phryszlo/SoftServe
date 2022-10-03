@@ -34,6 +34,16 @@ body {
   /* font-family: 'Noto Sans Mono', monospace; */
 }
 
+/* defaulters */
+button {
+  background-color: black;
+  color: var(--color0);
+  border: .3px solid var(--color0);
+  width: fit-content;
+  min-width: 9em;
+  margin: 0 auto;
+}
+
 /* 🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸
                         NAVIGATION
 /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
@@ -101,14 +111,8 @@ h1.page-title {
   margin: 0.6em auto;
 }
 
+/* DASHBOARD PAGE */
 
-.button-rack{
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  margin: auto;
-  /* border: .3px solid salmon; */
-}
 .button-rack{
   display: flex;
   flex-direction: column;
@@ -129,35 +133,50 @@ h1.page-title {
 .button-rack button:active {
   filter: hue-rotate(120deg);
 }
-.seed-btn-row {
+
+.seed-btn-row, .del-btn-row {
   display: flex;
   justify-content: center;
+  margin-bottom: .15em;
+  border-bottom: solid var(--colorDark);
 }
 
 .btn-seed{
   width: fit-content;
 }
-.btn-seed:hover {
+/* .btn-seed:hover {
   background-color: aliceblue;
 }
 .btn-seed:active {
   background-color: aquamarine;
-}
-.del-rnd-wrapper {
+} */
+.del-btn-row {
   display: flex;
   justify-content: center;
+  /* margin-bottom: .1em; */
 }
 .btn-delete-random {
+  text-align: right;
   width: 60%;
 }
-.btn-delete-random:hover {
+/* .btn-delete-random:hover {
   background-color: aliceblue;
 }
 .btn-delete-random:active {
   background-color: aquamarine;
-}
+} */
 .q-del {
   width: 12%;
+}
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1
+}
+
+/* CLIENTS PAGE */
+.btn-add-client {
+  width: fit-content;
+  min-width: 9em;
+  margin: .5em auto;
 }
 
 
@@ -243,6 +262,8 @@ h1.component-title {
   text-decoration: none;
 }
 
+
+
 .btn-delete {
   background-color: var(--colorBlack);
   color: var(--colorOrange);
@@ -322,6 +343,18 @@ h1.component-title {
   border-color: var(--colorDark);
 }
 
+/* these don't apply: why not? */
+.form-checkbox-input {
+  text-align: left;
+  border: 4px solid red;
+  /* justify-self: flex-start; */
+}
+input[type='checkbox'] {
+  text-align: left;
+  border: 4px solid blue;
+  /* justify-self: flex-start; */
+}
+
 img.client-img {
   font-size: 10px;
   height: 150px;
@@ -341,6 +374,22 @@ img.client-img {
   padding: .05em;
   /* border: .2px solid var(--color2); */
 }
+.check-field {
+  /* border: 3px solid orange; */
+  justify-content: flex-start;
+}
+.form-input-label-chk {
+  display: flex;
+}
+.form-input-label-chk input[type='checkbox'] {
+  margin-left: 2em;
+}
+.form-input-label-chk p {
+  min-width: 6em;
+  text-align: left;
+}
+
+
 
 .form-input,
 .comment {

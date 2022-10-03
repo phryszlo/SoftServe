@@ -9,7 +9,7 @@ const jsonParser = bodyParser.json();
 const clientRoutes = require('./routes/clients');
 const projectRoutes = require('./routes/projects');
 const invoiceRoutes = require('./routes/invoices');
-const invoiceItemsRoutes = require('./routes/invoice_items');
+const invoiceItemRoutes = require('./routes/invoice_items');
 const taskRoutes = require('./routes/tasks');
 
 const app = new express();

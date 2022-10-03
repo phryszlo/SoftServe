@@ -9,6 +9,7 @@ const { generateSlug } = require("random-word-slugs");
 const Projects = require('../models/project');
 const Invoices = require('../models/invoice');
 const { Mongoose } = require('mongoose');
+const InvoiceItem = require('../models/invoice_item');
 
 /*
 const invoiceSchema = new Schema({
@@ -46,7 +47,7 @@ router.get('/seed/:q', (req, res) => {
   for (let i = 0; i < req.params.q; i++) {
     let rndIdx = Math.floor(Math.random() * projectIds.length);
     let p = {};
-    let budget_number = generateSlug(4, { format: "title" });
+    let budget_number = faker.finance.bitcoinAddress(); // generateSlug(1, { format: "title" });
     let orderDate = faker.date.between("2022-01-01", Date.now())
     let promiseDate = faker.date.future();
     p.budget_number = budget_number;
@@ -58,48 +59,70 @@ router.get('/seed/:q', (req, res) => {
 
 
 
-  Invoices.create(fakes,
-    (err, data) => {
-      console.log(data);
+  Invoices.create(fakes)
+    .then((data) => {
+      // console.log(`return from invoice create: ${JSON.stringify(data)}`);
+      const newIds = [];
+      data.forEach((obj) => {
+        newIds.push(obj._id);
+        console.log(obj._id);
+        let invoice_items = seedInvoiceItems(obj._id, 5);
+        // console.log(`invoice_items returned: ${JSON.stringify(invoice_items)}`);
+        invoice_items.forEach(async (item) => {
+          await InvoiceItem.create(item);
+          // .then((result) => {
+          //   console.log(`result: ${JSON.stringify(result)}`);
+          // })
+          // .error((err) => {
+          //   console.log(`oh dear, ${err} happened.`)
+          // })
+        })
+      })
+    })
+    .catch((err) => {
       res.status(400).json({ success: false, message: err });
     })
 })
 
+const seedInvoiceItems = (invoice_id, count) => {
+  const fakes = [];
+  for (let i = 0; i < count; i++) {
+    let item = {};
+    item.description = faker.commerce.productName(); // generateSlug(7, { format: "title" });;
+    item.vendor = faker.company.name();
+    item.cost = faker.finance.amount(0.59, 35000);
+    item.invoice_id = invoice_id;
+    fakes.push(item);
+  };
+  return fakes;
+}
 
 //`${new Date(orderDate).toDateString()} ${new Date(orderDate).toLocaleTimeString('en-US')}`;
 //`${new Date(promiseDate).toDateString()} ${new Date(promiseDate).toLocaleTimeString('en-US')}`;
 
 
 router.get('/', async (req, res) => {
-  // just testing a cursor
-  console.log('invoices root route')
-  // const cursor = Invoices.find().cursor();
-  // for (let doc = await cursor.next();
-  //   doc != null;
-  //   doc = await cursor.next()) {
-  //   Object.values(doc).forEach(obj => {
-  //     Object.entries(obj).forEach((key, val) => {
-  //       // console.log(`key: ${key} val: ${val}`);
-  //       // console.log(`key type: ${typeof(key)}`);
-  //     })
-  //     // console.log(`... ${obj}`)
-  //   })
-  //   // console.log(`doc := ${doc}`);
-  // }
+  try {
+    console.log('invoice root route')
+    // if you leave out the _id, the populate on a virtual lookup won't work.
 
+    const allInvoices = await Invoices.find({}, "-__v -createdAt -updatedAt")
+      .populate('project_id')
+      .populate({ path: 'invoice_items', select: 'vendor invoice_id cost'  })
+//  populate({ path: 'posts', select: 'title author' }).
+      // .populate({ path: 'invoice_items', select: 'invoice_id vendor description' });
 
-  Invoices.find({}, "-_id -__v -createdAt -updatedAt")
-  // Invoices.find()
-    .then((allInvoices) => {
-      console.log(`allInvoices: ${allInvoices}`);
+    console.log(`${allInvoices.length} Invoices returned`);
+    res.json({ links: ['budget_number'], allInvoices });
+  }
+  catch (err) {
+    // res.status(400).json(obj)
+    console.log(`i
+    nvoice root erred: ${err}`)
+    res.status(400).json({ success: false, message: err });
+  }
 
-      // note: do not try: res.json({ invoices: allInvoices })
-      res.json(allInvoices);
-    })
-    .catch((err) => {
-      res.status(400).json({ success: false, message: err.message });
-    });
-})
+});
 
 
 router.post('/', async (req, res) => {
@@ -124,7 +147,6 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
-// =========PLAYER: GET ONE BY ID ============
 router.get('/:id', async (req, res) => {
 
   await Invoices.findById(req.params.id)
@@ -137,6 +159,22 @@ router.get('/:id', async (req, res) => {
     })
 });
 
+
+router.patch('/:id', async (req, res) => {
+
+  console.log(`invoices PUT: ${req.params.id} body: ${JSON.stringify(req.body)}`);
+  await Clients.findByIdAndUpdate(
+    req.params.id, req.body,
+    { new: true }
+  )
+    .then((updatedInvoice) => {
+      console.log(`updatedInvoice = ${updatedInvoice}`)
+      res.json({ 'invoice': updatedClient });
+    })
+    .catch((err) => {
+      res.json(err);
+    })
+})
 
 router.put('/:id', async (req, res) => {
   await Invoices.findByIdAndUpdate(req.params.id, req.body)

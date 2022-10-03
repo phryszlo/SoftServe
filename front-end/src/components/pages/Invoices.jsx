@@ -1,53 +1,76 @@
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 import AutoTable from '../elements/AutoTable';
 
-function Projects(props) {
-  const [projects, setProjects] = React.useState(null);
+function Invoices(props) {
+  const [invoices, setInvoices] = React.useState(null);
   const [linkFields, setLinkFields] = React.useState([]);
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
-    const getProjects = async () => {
-      const projectsFromServer = await fetchProjects()
-      // console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
-      // console.log(`linkFields = ${linkFields}`)
-      setProjects(projectsFromServer)
+    const getInvoices = async () => {
+      const invoicesFromServer = await fetchInvoices()
+      console.log(`invoicesFromServer = ${Object.values(invoicesFromServer)}`)
+      console.log(`linkFields = ${linkFields}`)
+      setInvoices(invoicesFromServer)
     }
-    getProjects();
+    getInvoices();
 
   }, []);
 
-  const fetchProjects = async () => {
-    const res = await fetch('/api/projects/')
-    console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
+  const fetchInvoices = async () => {
+    const res = await fetch('/api/invoices/')
+    // console.log(`res: ${Object.entries((key, entry) => key === 'allInvoices')}`);
     const data = await res.json()
 
-    console.log(data['allProjects']);
-    setLinkFields(Object.values(data)[0]);
+    console.log(data['allInvoices']);
+    console.log(data['links']);
 
-    return data.allProjects;
+    setLinkFields(data['links']);
+
+    // console.log(`invoice fields = ${JSON.stringify(linkFields)}`);
+
+    return data['allInvoices'];
   }
 
+  const handleAddInvoiceClick = (e) => {
+    e.preventDefault();
+    navigate('/invoice', {
+      props: {
+        document: {
+          name: 'Default P. Invoice',
+          email: 'deefie@gmail.com',
+          phone: '(790) 291-1596',
+          image_url: 'http://thispersondoesnotexist.com/image',
+          foo: false
+        }
+      }
+    });
 
+  }
 
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
-    <div className='page-component projects-page'>
+    <div className='page-component invoices-page'>
       <h1 className="page-title">{props.title}</h1>
 
       {
-        projects ?
-          <AutoTable model="project" route="invoices" linkFields={linkFields} documents={projects}></AutoTable>
+        invoices ?
+          <AutoTable title="all invoices" route="invoices" linkFields={linkFields} documents={invoices}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
-          : <div className="no-table-here"></div>
+          : <div className="no-table-here">no table</div>
       }
+
+      <button className="btn-add-invoice" onClick={handleAddInvoiceClick}>add new</button>
 
     </div>
   );
 }
 
-Projects.defaultProps = {
-  title: `Moe's Software Services Projectéle`,
+Invoices.defaultProps = {
+  title: `Moe's Software Services Invoiceéle`,
 }
 
-export default Projects
+export default Invoices

@@ -83,8 +83,9 @@ const Client = ({ document }) => {
       <img
         className="client-img"
         src={image_url ? image_url : 'http://thispersondoesnotexist.com/image'}
-        width="150px"
         alt={`client image not found`} />
+
+        
       <AutoForm
         keys={
           [

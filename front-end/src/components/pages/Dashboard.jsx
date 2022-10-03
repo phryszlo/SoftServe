@@ -22,13 +22,14 @@ function Dashboard(props) {
   const navigate = useNavigate();
 
 
-
   // there is a new "feature" in react v18 whereby useEffect runs 2x
   // when in dev mode with StrictMode turned on. it's intentional. i don't understand it.
   // when you build and deploy, it stops happening. but it's a problem when you do things like
   // seed data in your useEffect. or do inserts. or whatever. 
   // hence StrictMode is disabled whilst i.b. dev'ing.
 
+  // 🎬🎬🎬🎬🎬🎬🎬🎬🎬🎬🎬🎬
+  // #region effects
   React.useEffect(() => {
     console.log(`dashboard useEffect`)
     const getProjects = async () => {
@@ -47,8 +48,9 @@ function Dashboard(props) {
 
   }, []);
 
+  // I don't think either of these ended up being used. Nothing seems certain at the moment, so they stay.
   React.useEffect(() => {
-    console.log(`qDelProj useEffect`)
+    console.log(`updatingClients useEffect`)
 
     const getProjects = async () => {
       const projectsFromServer = await fetchProjects()
@@ -60,7 +62,7 @@ function Dashboard(props) {
   }, [updatingProjects])
 
   React.useEffect(() => {
-    console.log(`qDelClient useEffect`)
+    console.log(`updatingClients useEffect`)
 
     const getClients = async () => {
       const clientsFromServer = await fetchClients()
@@ -70,6 +72,8 @@ function Dashboard(props) {
     getClients();
 
   }, [updatingClients])
+
+
 
   const fetchProjects = async () => {
     const res = await fetch('/api/projects/')
@@ -93,10 +97,10 @@ function Dashboard(props) {
     setClientLinkFields(Object.values(data)[0]);
     return data.allClients;
   }
+  // #endregion
 
-
-// 🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆
-// #region seeders
+  // 🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆🧆
+  // #region seeders
 
   const onSeedClientsClick = (e) => {
     // setSeedClicks(seedClicks + 1);
@@ -104,10 +108,8 @@ function Dashboard(props) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-
         data && setClients(data.message)
         navigate(0);
-
       });
   }
 
@@ -118,8 +120,6 @@ function Dashboard(props) {
       .then((data) => {
         console.log(data);
         navigate(0);
-
-        // data && setProjects(data.message)
       });
   }
   const onSeedInvoicesClick = (e) => {
@@ -129,8 +129,6 @@ function Dashboard(props) {
       .then((data) => {
         console.log(data);
         // navigate(0);
-
-        // data && setProjects(data.message)
       });
   }
 
@@ -141,14 +139,11 @@ function Dashboard(props) {
       .then((data) => {
         console.log(data);
         // navigate(0);
-
-        // data && setProjects(data.message)
       });
   }
 
   // #endregion
-  
-  
+
   // 🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫🚫
   // #region deleters
   const onDeleteRandomProjectsClick = (e) => {
@@ -225,6 +220,7 @@ function Dashboard(props) {
       <h1 className="page-title">{props.title}</h1>
       {/* <p>{!data ? "Loading..." : data}</p> */}
       <div className="button-rack">
+        {/* SEEDERS CLIENTS/PROJECTS */}
         <div className="seed-btn-row">
           <button
             className="btn-seed btn-seed-clients"
@@ -237,19 +233,21 @@ function Dashboard(props) {
             seed 5 projects
           </button>
         </div>
+
+        {/* SEEDERS INVOICES/TASKS */}
         <div className="seed-btn-row">
           <button
             className="btn-seed btn-seed-invoices"
             onClick={onSeedInvoicesClick}>
-            seed 5 clients
+            seed 5 invoices
           </button>
           <button
             className="btn-seed btn-seed-tasks"
             onClick={onSeedTasksClick}>
-            seed 5 projects
+            seed 5 tasks
           </button>
         </div>
-        <div className="del-rnd-wrapper">
+        <div className="del-btn-row">
           <button className="btn-delete-random btn-delete-random-projects" onClick={onDeleteRandomProjectsClick}>delete random projects:</button>
           <input
             onChange={onQDelInputChange_proj}
@@ -257,7 +255,7 @@ function Dashboard(props) {
             className="q-del" ref={qProjDelRef} value={qDelProj}
           />
         </div>
-        <div className="del-rnd-wrapper">
+        <div className="del-btn-row">
           <button className="btn-delete-random btn-delete-random-clients" onClick={onDeleteRandomClientsClick}>delete random clients:</button>
           <input
             onChange={onQDelInputChange_client}

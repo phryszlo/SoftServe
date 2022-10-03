@@ -67,7 +67,7 @@ router.get('/:id', (req, res) => {
 })
 
 
-router.put('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   // Object.entries(req.body).forEach(([key, val], index) => {
   //   console.log(`entry: ${key}: ${val}`);
   // })

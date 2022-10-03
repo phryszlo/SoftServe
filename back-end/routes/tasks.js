@@ -45,20 +45,22 @@ router.get('/seed/:q', (req, res) => {
     let rndIdx = Math.floor(Math.random() * projectIds.length);
     let p = {};
     let name = generateSlug(4, { format: "title" });
-    let orderDate = faker.date.between("2022-01-01", Date.now())
-    let promiseDate = faker.date.future();
+    let completed = false;
+    let scheduledDate = faker.date.between("2022-01-01", Date.now())
+    let completedDate = null;
     p.name = name;
-    p.order_date = orderDate;
-    p.promise_date = promiseDate;
+    p.completed = completed;
+    p.scheduled_date = scheduledDate;
+    p.completed_date = completedDate;
     p.project = projectIds[rndIdx];
     fakes.push(p);
   }
 
-
-
-  Tasks.create(fakes,
-    (err, data) => {
-      console.log(data);
+  Tasks.create(fakes)
+    .then((data) => {
+      console.log(JSON.stringify(data));
+    })
+    .catch((err) => {
       res.status(400).json({ success: false, message: err });
     })
 })
@@ -69,16 +71,34 @@ router.get('/seed/:q', (req, res) => {
 
 
 router.get('/', async (req, res) => {
+  try {
+    console.log('task root route')
+    // if you leave out the _id, the populate on a virtual lookup won't work.
+
+    const allTasks = await Tasks.find({}, "-__v -createdAt -updatedAt")
+
+    console.log(`${allTasks.length} Tasks returned`);
+    res.json({ links: ['name'], allTasks });
+  }
+  catch (err) {
+    // res.status(400).json(obj)
+    res.status(400).json({ success: false, message: err });
+  }
+
+});
+
+
+router.get('/', async (req, res) => {
   // just testing a cursor
   console.log('tasks root route')
 
   Tasks.find({}, "-_id -__v -createdAt -updatedAt")
-  // Tasks.find()
+    // Tasks.find()
     .then((allTasks) => {
       console.log(`allTasks: ${allTasks}`);
 
       // note: do not try: res.json({ tasks: allTasks })
-      res.json(allTasks);
+      res.json(`"allTasks": ${allTasks}`);
     })
     .catch((err) => {
       res.status(400).json({ success: false, message: err.message });
@@ -108,7 +128,18 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
-// =========PLAYER: GET ONE BY ID ============
+router.delete('/:id', (req, res) => {
+  console.log(`task delete ${req.params.id} route reached`);
+  Tasks.findByIdAndRemove(req.params.id)
+    .then((removed) => {
+      console.log(removed && JSON.stringify(removed));
+      res.status(201).json({ success: true }); //, message: `delete succeeded for ${req.params.id}`
+    })
+    .catch((err) => {
+      err && res.status(400).json({ success: false, message: `delete attempt failed. ` });
+    });
+})
+
 router.get('/:id', async (req, res) => {
 
   await Tasks.findById(req.params.id)
@@ -121,16 +152,22 @@ router.get('/:id', async (req, res) => {
     })
 });
 
+router.patch('/:id', async (req, res) => {
 
-router.put('/:id', async (req, res) => {
-  await Tasks.findByIdAndUpdate(req.params.id, req.body)
+  console.log(`tasks PUT: ${req.params.id} body: ${JSON.stringify(req.body)}`);
+  await Clients.findByIdAndUpdate(
+    req.params.id, req.body,
+    { new: true }
+  )
     .then((updatedTask) => {
-      res.json({ 'task': updatedTask });
+      console.log(`updatedTask = ${updatedTask}`)
+      res.json({ 'task': updatedClient });
     })
     .catch((err) => {
-      res.status(400).json({ success: false, message: err.message });
+      res.json(err);
     })
 })
+
 
 
 module.exports = router;

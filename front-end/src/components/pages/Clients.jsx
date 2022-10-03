@@ -1,9 +1,12 @@
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 import AutoTable from '../elements/AutoTable';
 
 function Clients(props) {
   const [clients, setClients] = React.useState(null);
   const [linkFields, setLinkFields] = React.useState([]);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const getClients = async () => {
@@ -27,7 +30,21 @@ function Clients(props) {
     return data.allClients;
   }
 
+  const handleAddClientClick = (e) => {
+    e.preventDefault();
+    navigate('/client', {
+      props: {
+        document: {
+          name: 'Default P. Client',
+          email: 'deefie@gmail.com',
+          phone: '(790) 291-1596',
+          image_url: 'http://thispersondoesnotexist.com/image',
+          foo: false
+        }
+      }
+    });
 
+  }
 
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
@@ -41,6 +58,8 @@ function Clients(props) {
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
+
+      <button className="btn-add-client" onClick={handleAddClientClick}>add new</button>
 
     </div>
   );

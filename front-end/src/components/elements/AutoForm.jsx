@@ -21,9 +21,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   const navigate = useNavigate();
 
 
-  // next line learnt from:
-  // https://stackoverflow.com/questions/19874555/how-do-i-convert-array-of-objects-into-one-object-in-javascript
-  // let fields = keys ? keys.reduce((obj, item) => (obj[item.key] = item.value, obj), {}) : {}
+
   let fields = keys ? keys : {}
 
   React.useEffect(() => {
@@ -236,7 +234,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
   }
 
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔺🔺🔺🔺
-  const renderFormInput = (docKey, docVal) => {
+  const renderFormInput = (docKey, docVal, index) => {
     // console.log(`docKey= ${docKey} docVal=${docVal}`);
 
     switch (typeof (docVal)) {
@@ -251,7 +249,8 @@ const AutoForm = ({ title, document, keys, route, id }) => {
         // DATE STRING
         if (useAsDate) {
           return (
-            <React.Fragment>
+            <div className="form-field" key={`field-${index}`}>
+
               <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
 
               <DateTimePicker
@@ -305,7 +304,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                   </React.Fragment>
                 )}
               />
-            </React.Fragment>
+            </div>
           )
         }
 
@@ -313,7 +312,8 @@ const AutoForm = ({ title, document, keys, route, id }) => {
           // LONG STRING
           if (strLen > 30) {
             return (
-              <>
+              <div className="form-field" key={`field-${index}`}>
+
                 <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
                 <textarea
                   onChange={setFormVal(docKey)}
@@ -331,13 +331,14 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                   defaultValue={docVal}
                 >
                 </textarea>
-              </>
+              </div>
             )
           }
           // SHORT STRING
           else {
             return (
-              <>
+              <div className="form-field" key={`field-${index}`}>
+
                 <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
                 <input
                   id={`form-input-${docKey}`}
@@ -352,7 +353,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                   }
                   disabled={isDate ? true : false}
                 />
-              </>
+              </div>
             )
           }
         }
@@ -360,10 +361,14 @@ const AutoForm = ({ title, document, keys, route, id }) => {
       // BOOLEAN
       case "boolean":
         return (
-          <>
-            <label className="form-input-label" htmlFor={`form-input-${docKey}`}>{docKey}</label>
-            <input id={`form-input-${docKey}`} type="checkbox" className="form-input form-checkbox-input" name={docKey} defaultChecked={docVal} />
-          </>
+          <div className="form-field check-field" key={`field-${index}`}>
+
+            <label className="form-input-label-chk" htmlFor={`form-input-${docKey}`}>
+              <p>{docKey}</p>
+              <input id={`form-input-${docKey}`} type="checkbox" className="form-input form-checkbox-input" name={docKey} defaultChecked={docVal} />
+            </label>
+
+          </div>
         )
 
       // OBJECTS
@@ -380,7 +385,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
         // NON-DATE OBJECT
         else {
           return (
-            <>
+            <div className="form-field" key={`field-${index}`}>
               {/* <label className="form-input-label"></label>
               {
                 Object.entries(docVal).forEach(([key, val], index) => {
@@ -401,7 +406,7 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                   )
                 })
               } */}
-            </>
+            </div>
           )
         }
     }
@@ -458,11 +463,11 @@ const AutoForm = ({ title, document, keys, route, id }) => {
                 {Object.entries(document).map(([docKey, docVal], index) => {
                   return (
                     excludeFields.indexOf(docKey) < 0 ?
-                      <div className="form-field" key={`field-${index}`}>
-                        {
-                          renderFormInput(docKey, docVal)
-                        }
-                      </div>
+                      // <div className="form-field" key={`field-${index}`}>
+                      // {
+                      renderFormInput(docKey, docVal, index)
+                      // }
+                      // </div>
                       : ''
                   )
                 })}
@@ -482,7 +487,9 @@ const AutoForm = ({ title, document, keys, route, id }) => {
           </form>
         </div>
 
-        : <h4>no data was sent</h4>}
+        :
+        <h4>no data received</h4>
+      }
     </div>
   )
 
@@ -494,11 +501,13 @@ const AutoForm = ({ title, document, keys, route, id }) => {
 AutoForm.defaultProps = {
   title: `client form`,
   document: {
-    name: 'Default P. Client',
-    email: 'deefie@gmail.com',
-    phone: '(790) 291-1596',
+    title: 'THIS IS A DEMO FORM',
+    subtitle: 'it will not update',
+    isOverdue: true,
+    date: '12:35:55',
+    lorem: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique minus velit accusantium sapiente ipsum minima maiores sit earum aliquid aliquam dolore eveniet autem alias quam consequatur distinctio, placeat fugit omnis?',
     image_url: 'http://thispersondoesnotexist.com/image',
-    foo: false
+    isNotOverdue: false
   }
 }
 

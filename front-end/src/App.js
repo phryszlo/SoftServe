@@ -15,6 +15,8 @@ import Clients from "./components/pages/Clients";
 import Projects from "./components/pages/Projects";
 import Client from "./components/pages/Client";
 import Project from "./components/pages/Project";
+import Tasks from "./components/pages/Tasks";
+import Invoices from "./components/pages/Invoices";
 
 // HEY!
 // TURN STRICT MODE BACK ON!
@@ -52,6 +54,8 @@ function App() {
             </ul>
           </nav>
           <Routes>
+            <Route path="/invoices" element={<Invoices />} />
+            <Route path="/tasks" element={<Tasks />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/project/:id" element={<Project />} />
             <Route path="/project" element={<Project />} />

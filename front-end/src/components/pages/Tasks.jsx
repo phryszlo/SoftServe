@@ -1,53 +1,72 @@
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 import AutoTable from '../elements/AutoTable';
 
-function Projects(props) {
-  const [projects, setProjects] = React.useState(null);
+function Tasks(props) {
+  const [tasks, setTasks] = React.useState(null);
   const [linkFields, setLinkFields] = React.useState([]);
 
+  const navigate = useNavigate();
+
   React.useEffect(() => {
-    const getProjects = async () => {
-      const projectsFromServer = await fetchProjects()
-      // console.log(`projectsFromServer = ${Object.values(projectsFromServer)}`)
-      // console.log(`linkFields = ${linkFields}`)
-      setProjects(projectsFromServer)
+    const getTasks = async () => {
+      const tasksFromServer = await fetchTasks()
+      console.log(`tasksFromServer = ${Object.values(tasksFromServer)}`)
+      console.log(`linkFields = ${linkFields}`)
+      setTasks(tasksFromServer)
     }
-    getProjects();
+    getTasks();
 
   }, []);
 
-  const fetchProjects = async () => {
-    const res = await fetch('/api/projects/')
-    console.log(`res: ${Object.entries((key, entry) => key === 'allProjects')}`);
+  const fetchTasks = async () => {
+    const res = await fetch('/api/tasks/')
+    console.log(`res: ${Object.entries((key, entry) => key === 'allTasks')}`);
     const data = await res.json()
 
-    console.log(data['allProjects']);
+    console.log(`data from fetch all tasks: ${data['allTasks']}`);
     setLinkFields(Object.values(data)[0]);
 
-    return data.allProjects;
+    return data.allTasks;
   }
 
+  const handleAddTaskClick = (e) => {
+    e.preventDefault();
+    navigate('/task', {
+      props: {
+        document: {
+          name: 'Default P. Task',
+          email: 'deefie@gmail.com',
+          phone: '(790) 291-1596',
+          image_url: 'http://thispersondoesnotexist.com/image',
+          foo: false
+        }
+      }
+    });
 
+  }
 
   /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸
     🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹*/
   return (
-    <div className='page-component projects-page'>
+    <div className='page-component tasks-page'>
       <h1 className="page-title">{props.title}</h1>
 
       {
-        projects ?
-          <AutoTable model="project" route="tasks" linkFields={linkFields} documents={projects}></AutoTable>
+        tasks ?
+          <AutoTable title="all tasks" route="tasks" linkFields={linkFields} documents={tasks}></AutoTable>
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
+
+      <button className="btn-add-task" onClick={handleAddTaskClick}>add new</button>
 
     </div>
   );
 }
 
-Projects.defaultProps = {
-  title: `Moe's Software Services Projectéle`,
+Tasks.defaultProps = {
+  title: `Moe's Software Services Taskéle`,
 }
 
-export default Projects
+export default Tasks

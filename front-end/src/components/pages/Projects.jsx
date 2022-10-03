@@ -1,9 +1,12 @@
 import React from 'react'
 import AutoTable from '../elements/AutoTable';
+import { useNavigate } from 'react-router-dom';
 
 function Projects(props) {
   const [projects, setProjects] = React.useState(null);
   const [linkFields, setLinkFields] = React.useState([]);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const getProjects = async () => {
@@ -41,6 +44,7 @@ function Projects(props) {
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
+      <button className="btn-add-client" >add new</button>
 
     </div>
   );

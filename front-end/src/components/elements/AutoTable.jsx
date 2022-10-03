@@ -9,6 +9,7 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
       ? Object.keys(documents[0])
       : []
 
+
   let current_id = "63334d4c99b7d70f32220120";
   let current_sub_id = "63334d4c99b7d70f32220120";
 
@@ -23,9 +24,34 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
   // console.log(`${model} docs = ${documents}`)
   // console.log(`${model} fields = ${fields}`)
 
+  const renderTDList = (data) => {
+    console.log(`data = ${JSON.stringify(data)}`)
+    console.log(`data.length = ${data.length}`);
+    for (let i = 0; i < data.length; i++) {
+      console.log(`data[${i}] = yer ${JSON.stringify(Object.values(data)[i])}`)
+    }
+
+    return (
+      <ul>
+        {/* <li> */}
+        {/* {for (let i = 0; i < data.length; i++) {
+          console.log(`data[${i}] = yer ${JSON.stringify(Object.values(data)[i])}`)
+        }} */}
+        {Object.values(data).map((element, index) => {
+          return (
+            <li>{`${element.vendor} $${element.cost}`}</li>
+          )
+        }
+        )}
+        {/* </li> */}
+      </ul>
+    )
+  }
 
   // 🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻
   const renderTD = (field, doc, colIndex) => {
+    console.log(`fields: ${fields}, field=${field}`);
+
     if (field === '_id') {
       current_id = Object.values(doc)[colIndex];
       return '';
@@ -35,6 +61,14 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
     if (field === 'client') {
       // console.log(`field eqd client: ${Object.values(doc)[colIndex].id}`);
       current_sub_id = Object.values(doc)[colIndex] ? Object.values(doc)[colIndex].id : ''
+    }
+
+    if (field === 'invoice_items') {
+      console.log(`field eqd invoice_items: ${Object.values(doc)[colIndex].id}`);
+      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[0]}`);
+      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[1]}`);
+      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[2]}`);
+      current_sub_id = Object.values(doc)[0] ? Object.values(doc)[0] : ''
     }
 
     return (
@@ -87,16 +121,24 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
 
             `${new Date(Object.values(doc)[colIndex]).toDateString()}`
 
-            // {/* IS OBJECT TERNARY (avoids the Objects are not allowed as React children error)*/}
-            // it's not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.)
-            : typeof (Object.values(doc)[colIndex]) === "object"
-              ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
-                Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
+            // 🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺🤺
+            // IS ARRAY?
+            : field === 'invoice_items'
+              // : Array.isArray(Object.values(doc)[0])
+              // ? JSON.stringify(Object.values(doc)[2])
+              ? renderTDList(Object.values(doc)[2])
 
-              // {/* DEFAULT CONDITION OF DATE/OBJECT TERNARY */}
-              // no, it's what? a literal or primitive? this is the default.
-              // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
-              : Object.values(doc)[colIndex]
+
+              // {/* IS OBJECT TERNARY (avoids the Objects are not allowed as React children error)*/}
+              // it's not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.)
+              : typeof (Object.values(doc)[colIndex]) === "object"
+                ? Object.entries(Object.values(doc)[colIndex]).find((key, value) =>
+                  Object.values(doc)[colIndex][key] = value)[1] //[0] = key, [1] = value, in Object.entries.
+
+                // {/* DEFAULT CONDITION OF DATE/OBJECT TERNARY */}
+                // no, it's what? a literal or primitive? this is the default.
+                // (the whole thing is still an Object, so it still gets handled with one Object.values call.)
+                : Object.values(doc)[colIndex]
         }
         {/* END OF LINK-FIELD TERNARY */}
       </td>

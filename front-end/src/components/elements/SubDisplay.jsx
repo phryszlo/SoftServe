@@ -92,9 +92,10 @@ const SubDisplay = ({ title, document }) => {
 SubDisplay.defaultProps = {
   title: `sub display`,
   document: {
-    name: 'Madalyn Bode',
-    email: 'Madalyn.Bode@gmail.com',
-    phone: '(790) 291-1596',
+    name: 'L.C. Default',
+    email: 'elsie_deef@gmail.com',
+    phone: '(620) 010-1010',
+    lorem: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique minus velit accusantium sapiente ipsum minima maiores sit earum aliquid aliquam dolore eveniet autem alias quam consequatur distinctio, placeat fugit omnis?',
     foo: false
   }
 }
