@@ -282,7 +282,7 @@ function Dashboard(props) {
 }
 
 Dashboard.defaultProps = {
-  title: `Moe's Soft Serv - Internal Dashboard`,
+  title: `working title - internal dashboard`,
 }
 
 export default Dashboard

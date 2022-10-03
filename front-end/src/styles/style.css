@@ -70,9 +70,10 @@ body {
                       `PAGE` COMPONENTS
 /*🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸🔹🔸*/
 h1.page-title {
-  font-size: 34px;
+  font-size: 38px;
   color: var(--colorRed);
   font-family: 'Blaka Ink', cursive;
+  letter-spacing: .25pc;
   filter: saturate(900%) hue-rotate(220deg);
   -webkit-text-stroke: 1px var(--color0);
   text-shadow: -.2px .2px .2px var(--color0),
@@ -88,7 +89,7 @@ h1.page-title {
   flex-direction: column;
   min-height: 101vh;
   /* width: 95vw; */
-  margin: 2em auto;
+  margin: 0 auto;
 }
 
 .page-wrapper {
@@ -129,35 +130,49 @@ h1.page-title {
 .button-rack button:active {
   filter: hue-rotate(120deg);
 }
-.seed-btn-row {
+.seed-btn-row, .del-btn-row {
   display: flex;
   justify-content: center;
+  margin-bottom: .15em;
+  border-bottom: solid var(--colorDark);
 }
 
 .btn-seed{
   width: fit-content;
 }
-.btn-seed:hover {
+/* .btn-seed:hover {
   background-color: aliceblue;
 }
 .btn-seed:active {
   background-color: aquamarine;
-}
-.del-rnd-wrapper {
+} */
+.del-btn-row {
   display: flex;
   justify-content: center;
+  /* margin-bottom: .1em; */
 }
 .btn-delete-random {
+  text-align: right;
   width: 60%;
 }
-.btn-delete-random:hover {
+
+/* .btn-delete-random:hover {
   background-color: aliceblue;
 }
 .btn-delete-random:active {
   background-color: aquamarine;
-}
+} */
 .q-del {
   width: 12%;
+}
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1
+}
+
+.btn-add-item {
+  width: fit-content;
+  min-width: 9em;
+  margin: .5em auto;
 }
 
 
@@ -241,6 +256,16 @@ h1.component-title {
 .auto-table td>a:visited {
   color: var(--color1);
   text-decoration: none;
+}
+
+.td-list-item {
+  list-style: lower-roman;
+  /* width: 10em; */
+}
+.td-list-item span {
+  display: block;
+  /* width: 4em; */
+  border: solid orange;;
 }
 
 .btn-delete {

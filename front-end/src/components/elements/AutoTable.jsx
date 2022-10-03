@@ -32,14 +32,17 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
     }
 
     return (
-      <ul>
+      <ul className="td-list">
         {/* <li> */}
         {/* {for (let i = 0; i < data.length; i++) {
           console.log(`data[${i}] = yer ${JSON.stringify(Object.values(data)[i])}`)
         }} */}
         {Object.values(data).map((element, index) => {
           return (
-            <li>{`${element.vendor} $${element.cost}`}</li>
+            <li className='td-list-item'>
+              <span>{element.vendor}</span>
+              <span>${element.cost}</span>
+            </li>
           )
         }
         )}
@@ -64,10 +67,10 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
     }
 
     if (field === 'invoice_items') {
-      console.log(`field eqd invoice_items: ${Object.values(doc)[colIndex].id}`);
-      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[0]}`);
-      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[1]}`);
-      console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[2]}`);
+      // console.log(`field eqd invoice_items: ${Object.values(doc)[colIndex].id}`);
+      // console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[0]}`);
+      // console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[1]}`);
+      // console.log(`INVOICE ITEMS (obj.vals): ${Object.values(doc)[2]}`);
       current_sub_id = Object.values(doc)[0] ? Object.values(doc)[0] : ''
     }
 
@@ -127,7 +130,6 @@ const AutoTable = ({ documents, route, model, linkFields }) => {
               // : Array.isArray(Object.values(doc)[0])
               // ? JSON.stringify(Object.values(doc)[2])
               ? renderTDList(Object.values(doc)[2])
-
 
               // {/* IS OBJECT TERNARY (avoids the Objects are not allowed as React children error)*/}
               // it's not a date. is it an object? if so, handle it like an object (Object.entries, Object.values, etc.)

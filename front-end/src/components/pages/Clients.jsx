@@ -59,14 +59,14 @@ function Clients(props) {
           : <div className="no-table-here"></div>
       }
 
-      <button className="btn-add-client" onClick={handleAddClientClick}>add new</button>
+      <button className="btn-add-item btn-add-client" onClick={handleAddClientClick}>add new</button>
 
     </div>
   );
 }
 
 Clients.defaultProps = {
-  title: `Moe's Software Services Clientéle`,
+  title: `working title software services - client list`,
 }
 
 export default Clients

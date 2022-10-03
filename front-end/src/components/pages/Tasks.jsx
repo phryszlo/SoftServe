@@ -59,14 +59,14 @@ function Tasks(props) {
           : <div className="no-table-here"></div>
       }
 
-      <button className="btn-add-task" onClick={handleAddTaskClick}>add new</button>
+      <button className="btn-add-item btn-add-task" onClick={handleAddTaskClick}>add new</button>
 
     </div>
   );
 }
 
 Tasks.defaultProps = {
-  title: `Moe's Software Services Taskéle`,
+  title: `working title software services - client list`,
 }
 
 export default Tasks

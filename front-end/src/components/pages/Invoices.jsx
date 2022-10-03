@@ -63,14 +63,14 @@ function Invoices(props) {
           : <div className="no-table-here">no table</div>
       }
 
-      <button className="btn-add-invoice" onClick={handleAddInvoiceClick}>add new</button>
+      <button className="btn-add-item btn-add-invoice" onClick={handleAddInvoiceClick}>add new</button>
 
     </div>
   );
 }
 
 Invoices.defaultProps = {
-  title: `Moe's Software Services Invoiceéle`,
+  title: `working title software services - invoices`,
 }
 
 export default Invoices

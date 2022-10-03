@@ -44,14 +44,14 @@ function Projects(props) {
           // : <div className="no-table-here">NO CLIENT PROP RECEIVED</div>
           : <div className="no-table-here"></div>
       }
-      <button className="btn-add-client" >add new</button>
+      <button className="btn-add-item btn-add-project" >add new</button>
 
     </div>
   );
 }
 
 Projects.defaultProps = {
-  title: `Moe's Software Services Projectéle`,
+  title: `working title software services - project list`,
 }
 
 export default Projects
